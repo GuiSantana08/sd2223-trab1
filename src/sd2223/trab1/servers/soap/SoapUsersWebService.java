@@ -16,11 +16,10 @@ public class SoapUsersWebService extends SoapWebService<UsersException> implemen
 
     static Logger Log = Logger.getLogger(SoapUsersWebService.class.getName());
 
-    final Users impl;
+    final Users impl = new JavaUsers();;
 
     public SoapUsersWebService() {
         super((result) -> new UsersException(result.error().toString()));
-        this.impl = new JavaUsers();
     }
 
     @Override

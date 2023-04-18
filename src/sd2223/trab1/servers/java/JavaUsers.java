@@ -9,33 +9,50 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import java.util.zip.Checksum;
 
 import jakarta.ws.rs.core.Response;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 public class JavaUsers implements Users {
 
     private static Logger Log = Logger.getLogger(JavaUsers.class.getName());
-    private final Map<String, User> users = new HashMap<>();
+    private final Map<String, User> users = new ConcurrentHashMap<>();
 
+    public JavaUsers() {
+    }
+
+
+    private boolean badUserCreateData(User user) {
+        return user == null || user.getName() == null || user.getPwd() == null || user.getDisplayName() == null || user.getDomain() == null;
+    }
+
+    private User getUser(String name) {
+        return users.get(name);
+    }
 
     @Override
     public Result<String> createUser(User user) {
         Log.info("createUser : " + user);
 
         //Check if user data is valid
-        if(user.getName() == null || user.getPwd() == null || user.getDisplayName() == null || user.getDomain() == null) {
+        if(badUserCreateData(user)) {
             Log.info("User object invalid.");
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
 
-        //Insert user, checking if name already exists
-        if(users.putIfAbsent(user.getName(), user) != null) {
+        //check if user already exists
+        if(users.containsKey(user.getName())) {
             Log.info("User already exists.");
             return Result.error(Result.ErrorCode.CONFLICT);
         }
-        return Result.ok(user.getName());
+
+        users.put(user.getName(), user);
+
+        return Result.ok(user.getName()+"@"+user.getDomain());
     }
     @Override
     public Result<User> getUser(String name, String pwd) {
@@ -47,19 +64,19 @@ public class JavaUsers implements Users {
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
 
-        User user = users.get(name);
+        User u = getUser(name);
         //Check if user exists
-        if(user == null) {
+        if(u == null) {
             Log.info("User does not exist.");
             return Result.error(Result.ErrorCode.NOT_FOUND);
         }
 
         //Check if the password is correct
-        if(!user.getPwd().equals(pwd)) {
+        if(!u.getPwd().equals(pwd)) {
             Log.info("Password is incorrect.");
             return Result.error(Result.ErrorCode.FORBIDDEN);
         }
-        return Result.ok(user);
+        return Result.ok(u);
     }
 
     @Override
@@ -73,7 +90,7 @@ public class JavaUsers implements Users {
             //throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        User user1 = users.get(name);
+        User user1 = getUser(name);
 
         //Check if user exists
         if(user1 == null) {
@@ -83,15 +100,40 @@ public class JavaUsers implements Users {
         }
 
         //Check if the password is correct
-        if(user1.getPwd().equals(pwd)) {
-            users.put(name, user);
-            Log.info("User updated.");
-        }else {
+        if(!user1.getPwd().equals(pwd))
+        {
             Log.info("Password is incorrect.");
             return Result.error(Result.ErrorCode.FORBIDDEN);
             //throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
+
+        updateAtributes(user, user1);
+
+
         return Result.ok(user);
+    }
+
+    private void updateAtributes(User user, User modUser) {
+        String newName = user.getName();
+        if(newName != null && !newName.equals(modUser.getName())) {
+            modUser.setName(newName);
+        }
+        String newPwd = user.getPwd();
+        if(newPwd != null && !newPwd.equals(modUser.getPwd())) {
+            modUser.setPwd(newPwd);
+        }
+        String newDisplayName = user.getDisplayName();
+        if(newDisplayName != null && !newDisplayName.equals(modUser.getDisplayName())) {
+            modUser.setDisplayName(newDisplayName);
+        }
+        String newDomain = user.getDomain();
+        if(newDomain != null && !newDomain.equals(modUser.getDomain())) {
+            modUser.setDomain(newDomain);
+        }
+
+        System.out.println("USER UPDATEDDDDD: " + modUser);
+
+
     }
 
 

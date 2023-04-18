@@ -1,18 +1,19 @@
 package sd2223.trab1.servers.rest;
 
+import jakarta.inject.Singleton;
 import sd2223.trab1.api.Message;
 import sd2223.trab1.api.java.Feeds;
 import sd2223.trab1.api.rest.FeedsService;
+import sd2223.trab1.servers.java.JavaFeeds;
 
 import java.util.List;
 
+@Singleton
 public class RestFeedsResource  extends RestResource implements FeedsService {
 
-    final Feeds impl;
+    final Feeds impl = new JavaFeeds();
 
-    public RestFeedsResource(Feeds impl) {
-        this.impl = impl;
-    }
+    public RestFeedsResource() { }
     @Override
     public long postMessage(String user, String pwd, Message msg) {
         return  super.fromJavaResult(impl.postMessage(user, pwd, msg));

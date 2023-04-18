@@ -1,17 +1,19 @@
 package sd2223.trab1.servers.rest;
 
+import jakarta.inject.Singleton;
 import sd2223.trab1.api.User;
 import sd2223.trab1.api.java.Users;
 import sd2223.trab1.api.rest.UsersService;
+import sd2223.trab1.servers.java.JavaUsers;
 
 import java.util.List;
 
+@Singleton
 public class RestUsersResource extends RestResource implements UsersService{
 
-    final Users impl;
-    public RestUsersResource(Users impl) {
-        this.impl = impl;
-    }
+
+    final Users impl = new JavaUsers();
+    public RestUsersResource() {}
 
     @Override
     public String createUser(User user) { return super.fromJavaResult( impl.createUser( user)); }
