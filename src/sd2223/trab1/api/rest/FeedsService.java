@@ -1,4 +1,4 @@
-package sd2223.trab1.api.rest;
+package trabalho1.api.rest;
 
 import java.util.List;
 
@@ -11,8 +11,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
-import sd2223.trab1.api.Message;
-import sd2223.trab1.api.User;
+import trabalho1.api.Message;
 
 @Path(FeedsService.PATH)
 public interface FeedsService {
@@ -35,7 +34,8 @@ public interface FeedsService {
 	 * @param msg the message object to be posted to the server
 	 * @param pwd password of the user sending the message
 	 * @return	200 the unique numerical identifier for the posted message;
-	 *			403 if the publisher does not exist in the current domain or if the pwd is not correct
+	 *			404 if the publisher does not exist in the current domain
+	 *			403 if the pwd is not correct
 	 *			400 otherwise
 	 */
 	@POST
@@ -53,8 +53,8 @@ public interface FeedsService {
 	 * @param mid the identifier of the message to be deleted
 	 * @param pwd password of the user
 	 * @return	204 if ok
-	 * 			403 if the user does not exist or if the pwd is not correct;
-	 * 			404 is generated if the message does not exist in the server.
+	 *			403 if the pwd is not correct
+	 * 			404 is generated if the message does not exist in the server or if the user does not exist
 	 */
 	@DELETE
 	@Path("/{" + USER + "}/{" + MID + "}")
@@ -97,10 +97,10 @@ public interface FeedsService {
 	 *
 	 * @param user the user subscribing (following) other user (format user@domain)
 	 * @param userSub the user to be subscribed (followed) (format user@domain)
-	 * @param pwd password of the user to subscribe
+	 * @param pwd password of the user
 	 * @return	204 if ok
-	 * 			404 is generated if the user to be subscribed does not exist
-	 * 			403 is generated if the user does not exist or if the pwd is not correct
+	 * 			404 is generated if the user or the user to be subscribed does not exist
+	 * 			403 is generated if the pwd is not correct
 	 */
 	@POST
 	@Path("/sub/{" + USER + "}/{" + USERSUB + "}")
@@ -114,10 +114,10 @@ public interface FeedsService {
 	 *
 	 * @param user the user unsubscribing (following) other user (format user@domain)
 	 * @param userSub the identifier of the user to be unsubscribed
-	 * @param pwd password of the user to subscribe
+	 * @param pwd password of the user
 	 * @return 	204 if ok
-	 * 			403 is generated if the user does not exist or if the pwd is not correct
-	 * 			404 is generated if the userSub is not subscribed
+	 * 			404 is generated if the user or the user to be unsubscribed does not exist
+	 * 			403 is generated if the pwd is not correct
 	 */
 	@DELETE
 	@Path("/sub/{" + USER + "}/{" + USERSUB + "}")

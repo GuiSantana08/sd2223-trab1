@@ -1,4 +1,4 @@
-package sd2223.trab1.api;
+package trabalho1.api;
 /**
  * Represents a user in the system. Note: the password of a user should not be
  * returned in any method.
