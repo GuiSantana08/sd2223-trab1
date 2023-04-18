@@ -1,4 +1,4 @@
-package trabalho1.api;
+package sd2223.trab1.api;
 
 /**
  * Represents a message in the system.

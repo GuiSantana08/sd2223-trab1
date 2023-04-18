@@ -1,11 +1,11 @@
-package trabalho1.servers.soap;
+package sd2223.trab1.servers.soap;
 
 import jakarta.jws.WebService;
-import trabalho1.api.Message;
-import trabalho1.api.java.Feeds;
-import trabalho1.api.soap.FeedsException;
-import trabalho1.api.soap.FeedsService;
-import trabalho1.servers.java.JavaFeeds;
+import sd2223.trab1.servers.java.JavaFeeds;
+import sd2223.trab1.api.Message;
+import sd2223.trab1.api.java.Feeds;
+import sd2223.trab1.api.soap.FeedsException;
+import sd2223.trab1.api.soap.FeedsService;
 
 import java.util.List;
 import java.util.logging.Logger;

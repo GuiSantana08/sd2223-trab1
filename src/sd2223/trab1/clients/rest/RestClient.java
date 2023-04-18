@@ -1,4 +1,4 @@
-package trabalho1.clients.rest;
+package sd2223.trab1.clients.rest;
 
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
@@ -7,8 +7,8 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
-import trabalho1.api.java.Result;
-import trabalho1.api.java.Result.ErrorCode;
+import sd2223.trab1.api.java.Result;
+import sd2223.trab1.api.java.Result.ErrorCode;
 
 import java.net.URI;
 import java.util.function.Supplier;

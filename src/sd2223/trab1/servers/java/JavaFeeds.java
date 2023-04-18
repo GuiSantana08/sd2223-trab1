@@ -1,11 +1,11 @@
-package trabalho1.servers.java;
+package sd2223.trab1.servers.java;
 
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-import trabalho1.api.Message;
-import trabalho1.api.User;
-import trabalho1.api.java.Feeds;
-import trabalho1.api.java.Result;
+import sd2223.trab1.api.Message;
+import sd2223.trab1.api.User;
+import sd2223.trab1.api.java.Feeds;
+import sd2223.trab1.api.java.Result;
 
 import java.sql.Array;
 import java.util.HashMap;

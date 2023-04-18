@@ -1,8 +1,8 @@
-package trabalho1.servers.rest;
+package sd2223.trab1.servers.rest;
 
-import trabalho1.api.Message;
-import trabalho1.api.java.Feeds;
-import trabalho1.api.rest.FeedsService;
+import sd2223.trab1.api.Message;
+import sd2223.trab1.api.java.Feeds;
+import sd2223.trab1.api.rest.FeedsService;
 
 import java.util.List;
 

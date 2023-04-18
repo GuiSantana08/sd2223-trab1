@@ -1,10 +1,11 @@
-package trabalho1.api.soap;
+package sd2223.trab1.api.soap;
 
 import java.util.List;
 
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
-import trabalho1.api.Message;
+import sd2223.trab1.api.Message;
+
 
 @WebService(serviceName=FeedsService.NAME, targetNamespace=FeedsService.NAMESPACE, endpointInterface=FeedsService.INTERFACE)
 public interface FeedsService {

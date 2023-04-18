@@ -1,4 +1,4 @@
-package trabalho1.servers.java;
+package sd2223.trab1.servers.java;
 
 import java.net.*;
 import java.util.ArrayList;

@@ -1,6 +1,7 @@
-package trabalho1.api.java;
+package sd2223.trab1.api.java;
 
-import trabalho1.api.User;
+
+import sd2223.trab1.api.User;
 
 import java.util.List;
 

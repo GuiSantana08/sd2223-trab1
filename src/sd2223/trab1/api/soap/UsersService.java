@@ -1,10 +1,10 @@
-package trabalho1.api.soap;
+package sd2223.trab1.api.soap;
 
 import java.util.List;
 
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebService;
-import trabalho1.api.User;
+import sd2223.trab1.api.User;
 
 @WebService(serviceName=UsersService.NAME, targetNamespace=UsersService.NAMESPACE, endpointInterface=UsersService.INTERFACE)
 public interface UsersService {

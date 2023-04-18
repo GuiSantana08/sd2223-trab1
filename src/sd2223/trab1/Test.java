@@ -1,4 +1,4 @@
-package trabalho1;
+package sd2223.trab1;
 
 import java.net.URI;
 

@@ -1,8 +1,8 @@
-package trabalho1.servers.soap;
+package sd2223.trab1.servers.soap;
 
 import java.util.function.Function;
 
-import trabalho1.api.java.Result;
+import sd2223.trab1.api.java.Result;
 
 public abstract class SoapWebService<E extends Throwable> {
 

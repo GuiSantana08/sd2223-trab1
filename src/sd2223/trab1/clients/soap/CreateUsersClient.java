@@ -1,6 +1,6 @@
-package trabalho1.clients.soap;
+package sd2223.trab1.clients.soap;
 
-import trabalho1.api.User;
+import sd2223.trab1.api.User;
 
 public class CreateUsersClient {
 

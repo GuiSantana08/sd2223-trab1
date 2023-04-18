@@ -1,4 +1,4 @@
-package trabalho1.api.java;
+package sd2223.trab1.api.java;
 
 /**
  * 

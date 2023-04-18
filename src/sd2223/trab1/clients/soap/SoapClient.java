@@ -1,17 +1,17 @@
-package trabalho1.clients.soap;
+package sd2223.trab1.clients.soap;
 
 import com.sun.xml.ws.client.BindingProviderProperties;
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.WebServiceException;
-import trabalho1.api.java.Result;
-import trabalho1.api.java.Result.ErrorCode;
+import sd2223.trab1.api.java.Result;
+import sd2223.trab1.api.java.Result.ErrorCode;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.logging.Logger;
 
-import static trabalho1.api.java.Result.ok;
+import static sd2223.trab1.api.java.Result.ok;
 
 abstract class SoapClient {
     protected static final int READ_TIMEOUT = 5000;

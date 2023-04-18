@@ -1,8 +1,8 @@
-package trabalho1.api.java;
+package sd2223.trab1.api.java;
+
+import sd2223.trab1.api.Message;
 
 import java.util.List;
-
-import trabalho1.api.Message;
 
 public interface Feeds {
 

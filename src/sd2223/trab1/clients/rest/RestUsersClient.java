@@ -1,13 +1,13 @@
-package trabalho1.clients.rest;
+package sd2223.trab1.clients.rest;
 
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import trabalho1.api.User;
-import trabalho1.api.java.Result;
-import trabalho1.api.java.Users;
-import trabalho1.api.rest.UsersService;
+import sd2223.trab1.api.User;
+import sd2223.trab1.api.java.Result;
+import sd2223.trab1.api.java.Users;
+import sd2223.trab1.api.rest.UsersService;
 
 import java.net.URI;
 import java.util.List;

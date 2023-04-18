@@ -1,15 +1,15 @@
-package trabalho1.servers.soap;
+package sd2223.trab1.servers.soap;
 
 import java.util.List;
 import java.util.logging.Logger;
 
 import jakarta.jws.WebService;
-import trabalho1.api.User;
-import trabalho1.api.java.Users;
-import trabalho1.api.soap.UsersException;
-import trabalho1.api.soap.UsersService;
+import sd2223.trab1.servers.java.JavaUsers;
+import sd2223.trab1.api.User;
+import sd2223.trab1.api.java.Users;
+import sd2223.trab1.api.soap.UsersException;
+import sd2223.trab1.api.soap.UsersService;
 
-import trabalho1.servers.java.JavaUsers;
 
 @WebService(serviceName = UsersService.NAME, targetNamespace = UsersService.NAMESPACE, endpointInterface = UsersService.INTERFACE)
 public class SoapUsersWebService extends SoapWebService<UsersException> implements UsersService {

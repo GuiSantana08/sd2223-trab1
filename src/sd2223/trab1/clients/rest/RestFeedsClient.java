@@ -1,4 +1,4 @@
-package trabalho1.clients.rest;
+package sd2223.trab1.clients.rest;
 
 import java.net.URI;
 import java.util.List;
@@ -9,10 +9,10 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import trabalho1.api.Message;
-import trabalho1.api.java.Feeds;
-import trabalho1.api.java.Result;
-import trabalho1.api.rest.FeedsService;
+import sd2223.trab1.api.Message;
+import sd2223.trab1.api.java.Feeds;
+import sd2223.trab1.api.java.Result;
+import sd2223.trab1.api.rest.FeedsService;
 
 public class RestFeedsClient extends RestClient implements Feeds {
 

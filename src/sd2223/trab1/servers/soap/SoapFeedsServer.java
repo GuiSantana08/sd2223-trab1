@@ -1,4 +1,4 @@
-package trabalho1.servers.soap;
+package sd2223.trab1.servers.soap;
 
 import jakarta.xml.ws.Endpoint;
 

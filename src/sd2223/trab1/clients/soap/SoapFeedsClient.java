@@ -1,14 +1,14 @@
-package trabalho1.clients.soap;
+package sd2223.trab1.clients.soap;
 
 import java.net.URI;
 import java.util.List;
 
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.Service;
-import trabalho1.api.Message;
-import trabalho1.api.java.Feeds;
-import trabalho1.api.java.Result;
-import trabalho1.api.soap.FeedsService;
+import sd2223.trab1.api.Message;
+import sd2223.trab1.api.java.Feeds;
+import sd2223.trab1.api.java.Result;
+import sd2223.trab1.api.soap.FeedsService;
 
 import javax.xml.namespace.QName;
 
@@ -22,7 +22,7 @@ public class SoapFeedsClient extends SoapClient implements Feeds {
         if (stub == null) {
             QName QNAME = new QName(FeedsService.NAMESPACE, FeedsService.NAME);
             Service service = Service.create(super.toURL(super.uri + WSDL), QNAME);
-            this.stub = service.getPort(trabalho1.api.soap.FeedsService.class);
+            this.stub = service.getPort(FeedsService.class);
             super.setTimeouts((BindingProvider) stub);
         }
         return stub;

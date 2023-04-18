@@ -1,8 +1,8 @@
-package trabalho1.servers.rest;
+package sd2223.trab1.servers.rest;
 
-import trabalho1.api.User;
-import trabalho1.api.java.Users;
-import trabalho1.api.rest.UsersService;
+import sd2223.trab1.api.User;
+import sd2223.trab1.api.java.Users;
+import sd2223.trab1.api.rest.UsersService;
 
 import java.util.List;
 

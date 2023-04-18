@@ -1,9 +1,9 @@
-package trabalho1.servers.rest;
+package sd2223.trab1.servers.rest;
 
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-import trabalho1.api.java.Result;
+import sd2223.trab1.api.java.Result;
 
 public class RestResource {
 

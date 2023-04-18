@@ -1,11 +1,11 @@
-package trabalho1.clients.soap;
+package sd2223.trab1.clients.soap;
 
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.Service;
-import trabalho1.api.User;
-import trabalho1.api.java.Result;
-import trabalho1.api.java.Users;
-import trabalho1.api.soap.UsersService;
+import sd2223.trab1.api.User;
+import sd2223.trab1.api.java.Result;
+import sd2223.trab1.api.java.Users;
+import sd2223.trab1.api.soap.UsersService;
 
 import javax.xml.namespace.QName;
 import java.net.URI;
@@ -22,7 +22,7 @@ public class SoapUsersClient extends SoapClient implements Users {
         if (stub == null) {
             QName QNAME = new QName(UsersService.NAMESPACE, UsersService.NAME);
             Service service = Service.create(super.toURL(super.uri + WSDL), QNAME);
-            this.stub = service.getPort(trabalho1.api.soap.UsersService.class);
+            this.stub = service.getPort(UsersService.class);
             super.setTimeouts((BindingProvider) stub);
 
         }

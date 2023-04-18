@@ -1,4 +1,4 @@
-package trabalho1.clients.soap;
+package sd2223.trab1.clients.soap;
 
 public class CreateFeedsClient {
 

@@ -1,4 +1,4 @@
-package trabalho1.api.soap;
+package sd2223.trab1.api.soap;
 
 import jakarta.xml.ws.WebFault;
 

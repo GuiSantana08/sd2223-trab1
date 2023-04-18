@@ -1,11 +1,11 @@
-package trabalho1.clients;
+package sd2223.trab1.clients;
 
-import trabalho1.api.java.Feeds;
-import trabalho1.api.java.Users;
-import trabalho1.clients.rest.RestFeedsClient;
-import trabalho1.clients.rest.RestUsersClient;
-import trabalho1.clients.soap.SoapFeedsClient;
-import trabalho1.clients.soap.SoapUsersClient;
+import sd2223.trab1.api.java.Feeds;
+import sd2223.trab1.api.java.Users;
+import sd2223.trab1.clients.rest.RestFeedsClient;
+import sd2223.trab1.clients.rest.RestUsersClient;
+import sd2223.trab1.clients.soap.SoapFeedsClient;
+import sd2223.trab1.clients.soap.SoapUsersClient;
 
 public class UsersClientFactory {
 

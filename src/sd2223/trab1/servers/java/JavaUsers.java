@@ -1,9 +1,9 @@
-package trabalho1.servers.java;
+package sd2223.trab1.servers.java;
 
 import jakarta.ws.rs.WebApplicationException;
-import trabalho1.api.User;
-import trabalho1.api.java.Result;
-import trabalho1.api.java.Users;
+import sd2223.trab1.api.User;
+import sd2223.trab1.api.java.Result;
+import sd2223.trab1.api.java.Users;
 
 import java.util.HashMap;
 import java.util.LinkedList;

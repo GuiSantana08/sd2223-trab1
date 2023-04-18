@@ -1,9 +1,8 @@
-package trabalho1.servers.rest;
+package sd2223.trab1.servers.rest;
 
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import trabalho1.servers.java.Discovery;
-
+import sd2223.trab1.servers.java.Discovery;
 import java.net.InetAddress;
 import java.net.URI;
 import java.util.logging.Logger;
