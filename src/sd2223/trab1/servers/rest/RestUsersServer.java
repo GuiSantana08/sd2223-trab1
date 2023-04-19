@@ -22,7 +22,8 @@ public class RestUsersServer {
 
     public static void main(String[] args) {
         try {
-
+            String domain = args[0];
+            String msgID = args[1];
             ResourceConfig config = new ResourceConfig();
             config.register(RestUsersResource.class);
             // config.register(CustomLoggingFilter.class);
@@ -33,7 +34,7 @@ public class RestUsersServer {
 
             Log.info(String.format("%s Server ready @ %s\n", SERVICE, serverURI));
             // More code can be executed here...
-            Discovery.getInstance().announce(SERVICE, serverURI);
+            Discovery.getInstance().announce(domain, SERVICE, serverURI);
 
         } catch (Exception e) {
             Log.severe(e.getMessage());

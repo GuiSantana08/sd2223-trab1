@@ -6,12 +6,16 @@ import sd2223.trab1.api.Message;
 import sd2223.trab1.api.User;
 import sd2223.trab1.api.java.Feeds;
 import sd2223.trab1.api.java.Result;
+import sd2223.trab1.api.java.Users;
+import sd2223.trab1.clients.UsersClientFactory;
 
-import java.sql.Array;
-import java.util.HashMap;
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class JavaFeeds implements Feeds {
@@ -19,14 +23,28 @@ public class JavaFeeds implements Feeds {
     /**
      * Map of message by user.
      */
-    private final Map<String, List<Message>> userMessages = new HashMap<>();
+    private final Map<String, List<Message>> userMessages;
 
     /**
      * Map of users subscribed by user.
      */
-    private final Map<String, List<String>> users = new HashMap<>();
+    private final Map<String, List<String>> users;
 
-    private static Logger Log = Logger.getLogger(JavaFeeds.class.getName());
+    private static Logger Log;
+
+    private Users usersResource;
+
+    public JavaFeeds() {
+        userMessages = new ConcurrentHashMap<>();
+        users = new ConcurrentHashMap<>();
+        Log = Logger.getLogger(JavaFeeds.class.getName());
+        try{
+            URI usersServiceURI = Discovery.getInstance().
+            usersResource = UsersClientFactory.getUserClient();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Override
@@ -39,19 +57,17 @@ public class JavaFeeds implements Feeds {
         }
 
         //Check if msg is valid
-        if (msg.getId() <= 0 || msg.getUser() == null || msg.getText() == null || msg.getCreationTime() <= 0) {
+        if (msg.getUser() == null || msg.getText() == null || msg.getCreationTime() <= 0) {
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
 
-
-
-
         //Check if user exists
         if(!userMessages.containsKey(user)) {
-            userMessages.put(user, new LinkedList<>());
+            userMessages.put(user, new ArrayList<>());
             userMessages.get(user).add(msg);
         }else
             userMessages.get(user).add(msg);
+
         return Result.ok(msg.getId());
     }
 

@@ -22,7 +22,8 @@ public class RestFeedsServer {
 
     public static void main(String[] args) {
         try {
-
+            String domain = args[0];
+            String msgID = args[1];
             ResourceConfig config = new ResourceConfig();
             config.register(RestFeedsResource.class);
             // config.register(CustomLoggingFilter.class);
@@ -33,7 +34,7 @@ public class RestFeedsServer {
 
             Log.info(String.format("%s Server ready @ %s\n", SERVICE, serverURI));
             // More code can be executed here...
-            Discovery.getInstance().announce(SERVICE, serverURI);
+            Discovery.getInstance().announce(domain, SERVICE, serverURI);
 
         } catch (Exception e) {
             Log.severe(e.getMessage());

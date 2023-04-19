@@ -1,10 +1,7 @@
 package sd2223.trab1.servers.java;
 
 import java.net.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -23,7 +20,7 @@ public interface Discovery {
 	 * @param serviceName - the name of the service
 	 * @param serviceURI  - the uri of the service
 	 */
-	public void announce(String serviceName, String serviceURI);
+	public void announce(String domainName, String serviceName, String serviceURI);
 
 	/**
 	 * Get discovered URIs for a given service name
@@ -50,7 +47,9 @@ public interface Discovery {
  */
 class DiscoveryImpl implements Discovery {
 
-	private Map<String, ArrayList<URI>> listURLs = new HashMap<>();
+	private Map<String, List<URI>> listURIs = new HashMap<>();
+
+	private Map<String, Map<String, URI>> servDomURIS = new HashMap<>();
 
 	private static Logger Log = Logger.getLogger(Discovery.class.getName());
 
@@ -81,11 +80,11 @@ class DiscoveryImpl implements Discovery {
 	}
 
 	@Override
-	public void announce(String serviceName, String serviceURI) {
+	public void announce(String domainName, String serviceName, String serviceURI) {
 		Log.info(String.format("Starting Discovery announcements on: %s for: %s -> %s\n", DISCOVERY_ADDR, serviceName,
 				serviceURI));
 
-		var pktBytes = String.format("%s%s%s", serviceName, DELIMITER, serviceURI).getBytes();
+		var pktBytes = String.format("%s:%s%s%s",domainName, serviceName, DELIMITER, serviceURI).getBytes();
 		var pkt = new DatagramPacket(pktBytes, pktBytes.length, DISCOVERY_ADDR);
 
 		// start thread to send periodic announcements
@@ -107,15 +106,19 @@ class DiscoveryImpl implements Discovery {
 
 	@Override
 	public URI[] knownUrisOf(String serviceName, int minEntries) {
-		ArrayList<URI> URIs = listURLs.get(serviceName);
+		List<URI> URIs = listURIs.get(serviceName);
 		URI[] uri = new URI[URIs.size()];
 		int counter = 0;
-		synchronized (listURLs) {
+		synchronized (listURIs) {
 			Iterator it = URIs.iterator();
 			while (it.hasNext())
 				uri[counter++] = (URI) it.next();
 		}
 		return uri;
+	}
+
+	public URI uriServDom(String dom, String serv){
+		return servDomURIS.get(dom).get(serv);
 	}
 
 	private void startListener() {
@@ -136,19 +139,31 @@ class DiscoveryImpl implements Discovery {
 						var parts = msg.split(DELIMITER);
 						if (parts.length == 2) {
 							// TODO: complete by storing the decoded announcements...
-							var serviceName = parts[0];
+							var parts2 = parts[0].split(":");
+							String domainName = parts2[0];
+							String serviceName = parts2[1];
 							var uri = URI.create(parts[1]);
-							synchronized (listURLs) {
-								if (listURLs.containsKey(serviceName))
-									listURLs.get(serviceName).add(uri);
+							var list = listURIs.get(serviceName);
+							var mapDom = servDomURIS.get(domainName);
+							synchronized (listURIs) {
+								if (list != null) {
+									list.add(uri);
+								}
 								else {
-									ArrayList<URI> uriList = new ArrayList<>();
-									uriList.add(uri);
-									listURLs.put(serviceName, uriList);
+									list = new ArrayList<>();
+									list.add(uri);
+									listURIs.put(serviceName, list);
+								}
+								if (mapDom != null) {
+									mapDom.put(serviceName, uri);
+								}
+								else {
+									mapDom = new HashMap<>();
+									mapDom.put(serviceName, uri);
+									servDomURIS.put(domainName, mapDom);
 								}
 							}
 						}
-
 					} catch (Exception x) {
 						x.printStackTrace();
 					}
