@@ -5,10 +5,7 @@ import sd2223.trab1.api.User;
 import sd2223.trab1.api.java.Result;
 import sd2223.trab1.api.java.Users;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 import java.util.zip.Checksum;
@@ -107,35 +104,28 @@ public class JavaUsers implements Users {
             //throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
 
-        updateAtributes(user, user1);
-
-
-        return Result.ok(user);
-    }
-
-    private void updateAtributes(User user, User modUser) {
-        String newName = user.getName();
-        if(newName != null && !newName.equals(modUser.getName())) {
-            modUser.setName(newName);
+        //Check if the username is the same
+        if(!user1.getName().equals(user.getName())) {
+            Log.info("Username is different.");
+            return Result.error(Result.ErrorCode.BAD_REQUEST);
+            //throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
+
         String newPwd = user.getPwd();
-        if(newPwd != null && !newPwd.equals(modUser.getPwd())) {
-            modUser.setPwd(newPwd);
+        if(newPwd != null) {
+            user1.setPwd(newPwd);
         }
         String newDisplayName = user.getDisplayName();
-        if(newDisplayName != null && !newDisplayName.equals(modUser.getDisplayName())) {
-            modUser.setDisplayName(newDisplayName);
+        if(newDisplayName != null) {
+            user1.setDisplayName(newDisplayName);
         }
         String newDomain = user.getDomain();
-        if(newDomain != null && !newDomain.equals(modUser.getDomain())) {
-            modUser.setDomain(newDomain);
+        if(newDomain != null) {
+            user1.setDomain(newDomain);
         }
 
-        System.out.println("USER UPDATEDDDDD: " + modUser);
-
-
+        return Result.ok(user1);
     }
-
 
     @Override
     public Result<User> deleteUser(String name, String pwd) {
@@ -168,13 +158,27 @@ public class JavaUsers implements Users {
 
     @Override
     public Result<List> searchUsers(String pattern) {
-        List<User> list =  new LinkedList<User>();
+        List<User> list =  new ArrayList<>();
         Log.info("searchUsers : pattern = " + pattern);
 
-        users.forEach((x, temp) ->{
-            if(temp.getDisplayName().contains(pattern))
-                list.add(temp);
-        });
+        Set<String> keys = users.keySet();
+        Iterator<String> it = keys.iterator();
+
+        if(pattern == "") {
+            list.addAll(users.values());
+        }
+        else {
+            while (it.hasNext()) {
+                String key = it.next();
+                User u = users.get(key);
+                if (u.getName().contains(pattern)) {
+                    list.add(u);
+                    System.out.println("ADICIONOUUUUU" + u.getName());
+                }
+            }
+        }
+
+        System.out.println("FUNCIONOUUUUUUU");
         return Result.ok(list);
     }
 

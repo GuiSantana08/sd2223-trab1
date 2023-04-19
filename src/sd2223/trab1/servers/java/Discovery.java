@@ -60,7 +60,7 @@ class DiscoveryImpl implements Discovery {
 	static final int DISCOVERY_ANNOUNCE_PERIOD = 1000;
 
 	// Replace with appropriate values...
-	static final InetSocketAddress DISCOVERY_ADDR = new InetSocketAddress("888.888.888.888", 8888);
+	static final InetSocketAddress DISCOVERY_ADDR = new InetSocketAddress("226.226.226.226", 2266);
 
 	// Used separate the two fields that make up a service announcement.
 	private static final String DELIMITER = "\t";
