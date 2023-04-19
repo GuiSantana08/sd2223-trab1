@@ -1,5 +1,7 @@
 package sd2223.trab1.servers.java;
 
+import com.fasterxml.jackson.core.JsonToken;
+
 import java.net.*;
 import java.util.*;
 import java.util.logging.Logger;
@@ -16,11 +18,14 @@ public interface Discovery {
 
 	/**
 	 * Used to announce the URI of the given service name.
-	 * 
+	 *
+	 * @param domainName - the name of the domain
 	 * @param serviceName - the name of the service
 	 * @param serviceURI  - the uri of the service
 	 */
-	public void announce(String domainName, String serviceName, String serviceURI);
+	 void announce(String domainName, String serviceName, String serviceURI);
+
+	 URI uriServDom(String dom, String serv);
 
 	/**
 	 * Get discovered URIs for a given service name
@@ -30,14 +35,14 @@ public interface Discovery {
 	 *                    number is satisfied.
 	 * @return array with the discovered URIs for the given service name.
 	 */
-	public URI[] knownUrisOf(String serviceName, int minReplies);
+	URI[] knownUrisOf(String serviceName, int minReplies);
 
 	/**
 	 * Get the instance of the Discovery service
 	 * 
 	 * @return the singleton instance of the Discovery service
 	 */
-	public static Discovery getInstance() {
+	 static Discovery getInstance() {
 		return DiscoveryImpl.getInstance();
 	}
 }
@@ -118,6 +123,8 @@ class DiscoveryImpl implements Discovery {
 	}
 
 	public URI uriServDom(String dom, String serv){
+		System.out.println("PRINTTTTT DOS DOOMMMMMMMMMMMSSMMMMSSMMM");
+		System.out.println(servDomURIS.get(dom));
 		return servDomURIS.get(dom).get(serv);
 	}
 

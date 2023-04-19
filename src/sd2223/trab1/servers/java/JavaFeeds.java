@@ -7,14 +7,14 @@ import sd2223.trab1.api.User;
 import sd2223.trab1.api.java.Feeds;
 import sd2223.trab1.api.java.Result;
 import sd2223.trab1.api.java.Users;
+import sd2223.trab1.api.rest.UsersService;
 import sd2223.trab1.clients.UsersClientFactory;
+
+import sd2223.trab1.servers.rest.RestUsersServer;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -32,18 +32,17 @@ public class JavaFeeds implements Feeds {
 
     private static Logger Log;
 
+    private static long msgID;
+
     private Users usersResource;
 
     public JavaFeeds() {
         userMessages = new ConcurrentHashMap<>();
         users = new ConcurrentHashMap<>();
         Log = Logger.getLogger(JavaFeeds.class.getName());
-        try{
-            URI usersServiceURI = Discovery.getInstance().
-            usersResource = UsersClientFactory.getUserClient();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        URI usersServiceURI = Discovery.getInstance().uriServDom(RestUsersServer.DOMAIN, RestUsersServer.SERVICE);
+        usersResource = UsersClientFactory.getUserClient(usersServiceURI);
+        msgID = 1;
     }
 
 
@@ -61,14 +60,44 @@ public class JavaFeeds implements Feeds {
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
 
+        Result u = usersResource.getUser(user, pwd);
+
         //Check if user exists
+        if(!u.isOK())
+            return Result.error(u.error());
+
+        msg.setId(msgID++);
+
+        //Check if user has any messages
         if(!userMessages.containsKey(user)) {
-            userMessages.put(user, new ArrayList<>());
+            List<Message> messages = new ArrayList<>();
+            messages.add(msg);
+            userMessages.put(user, messages);
+        }
+        else{
             userMessages.get(user).add(msg);
-        }else
-            userMessages.get(user).add(msg);
+        }
 
         return Result.ok(msg.getId());
+    }
+
+    @Override
+    public Result<Message> getMessage(String user, long mid) {
+        Log.info("getMessage: user = " + user + ", mid = " + mid);
+
+        if (user == null && mid <= 0)
+            return Result.error(Result.ErrorCode.BAD_REQUEST);
+
+        if(!userMessages.containsKey(user))
+            return Result.error(Result.ErrorCode.NOT_FOUND);
+
+        List<Message> messages = userMessages.get(user);
+        for (Message message : messages) {
+            if(message.getId() == mid){
+                return Result.ok(message);
+            }
+        }
+        return Result.error(Result.ErrorCode.NOT_FOUND);
     }
 
     @Override
@@ -93,30 +122,6 @@ public class JavaFeeds implements Feeds {
             }
             return Result.error(Result.ErrorCode.NOT_FOUND);
         }
-    }
-
-    @Override
-    public Result<Message> getMessage(String user, long mid) {
-        Log.info("getMessage: user = " + user + ", mid = " + mid);
-
-        //Check if user and mid is valid
-        if (user == null && mid <= 0) {
-            return Result.error(Result.ErrorCode.BAD_REQUEST);
-        }
-        //check if user exists
-        if(!userMessages.containsKey(user)) {
-            return Result.error(Result.ErrorCode.NOT_FOUND);
-        }else{
-            List<Message> messages = userMessages.get(user);
-            //TODO better way to do this?
-            for (Message message : messages) {
-                if(message.getId() == mid){
-                    return Result.ok(message);
-                }
-            }
-            return Result.error(Result.ErrorCode.NOT_FOUND);
-        }
-
     }
     @Override
     public Result<List> getMessages(String user, long time) {
