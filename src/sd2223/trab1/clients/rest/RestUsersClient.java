@@ -59,7 +59,7 @@ public class RestUsersClient extends RestClient implements Users {
     }
 
     private Result<List> clt_searchUsers(String pattern) {
-        Response r = target.path(UsersService.PATH)
+        Response r = target.path("/")
                 .queryParam(UsersService.QUERY, pattern).request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
@@ -68,6 +68,7 @@ public class RestUsersClient extends RestClient implements Users {
             return super.toJavaResult(r, List.class);
         else
             System.out.println("Error, HTTP error status: " + r.getStatus());
+
         return null;
     }
 
