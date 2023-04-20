@@ -181,28 +181,33 @@ public class JavaFeeds implements Feeds {
 
     @Override
     public Result<Void> removeFromPersonalFeed(String user, long mid, String pwd) {
-        return null;
-    }
-       /* Log.info("removeFromPersonalFeed: user = " + user + ", mid = " + mid);
+        Log.info("removeFromPersonalFeed: user = " + user + ", mid = " + mid);
 
         //Check if user is valid
         if (user == null || pwd == null) {
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
-        //Check if user exists
-        if(!userMessages.containsKey(user)) {
-            return Result.error(Result.ErrorCode.NOT_FOUND);
-        }else{
-            List<Message> messages = userMessages.get(user);
-            //TODO better way to do this?
+
+        // Check if user exists
+        Result r1 = isUserValid(user, pwd);
+        if(!r1.isOK()) {
+            Log.info("User not found");
+            return Result.error(r1.error());
+        }
+
+        // Check if user has the message and remove it
+        List<Message> messages = userMessages.get(user);
+        if(messages != null){
             for (Message message : messages) {
                 if(message.getId() == mid){
                     messages.remove(message);
                     return Result.ok();
                 }
             }
-            return Result.error(Result.ErrorCode.NOT_FOUND);
-        }*/
+        }
+
+        return null;
+    }
 
     @Override
     public Result<List> getMessages(String user, long time) {
