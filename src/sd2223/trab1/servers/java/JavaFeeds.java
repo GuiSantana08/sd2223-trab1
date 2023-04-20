@@ -63,7 +63,12 @@ public class JavaFeeds implements Feeds {
             return Result.error(Result.ErrorCode.NOT_FOUND);
         }
         URI uri = uris[0];
-        return UsersClientFactory.getUserClient(uri).getUser(name, pwd);
+        Result<User> r = UsersClientFactory.getUserClient(uri).getUser(name, pwd);
+        if(r.error().equals(Result.ErrorCode.NOT_FOUND))
+            return Result.error(Result.ErrorCode.BAD_REQUEST);
+        else if(!r.isOK())
+            return Result.error(r.error());
+        return r;
 
     }
 
@@ -88,11 +93,9 @@ public class JavaFeeds implements Feeds {
         Log.info("VERIFICAAAAAAAA USERRRRRRRRRRRR");
         if(users.size() == 0)
             return Result.error(Result.ErrorCode.NOT_FOUND);
-        Log.info("ENCONTROU PELO MENOS UM USERRRRRRRRRRRR");
         return Result.ok(true);
 
     }
-
 
 
 
@@ -111,8 +114,11 @@ public class JavaFeeds implements Feeds {
         //Check if user exists
         if(!u.isOK()) {
             Log.info("User not found or wrong password");
+
+            Log.info("+++++++++++++" + u.error().toString() + "++++++++++++++");
             return Result.error(u.error());
         }
+
 
         msg.setId(msgID++);
 
