@@ -76,6 +76,8 @@ public class JavaFeeds implements Feeds {
 
 
 
+
+
     @Override
     public Result<Long> postMessage(String user, String pwd, Message msg) {
         Log.info("postMessage: user = " + user + ", msg = " + msg);
@@ -165,11 +167,14 @@ public class JavaFeeds implements Feeds {
         }
 
         //check if user exists
-        Result r1 = hasDomain(user);
+        if(!userMessages.containsKey(user))
+            return Result.error(Result.ErrorCode.NOT_FOUND);
+
+       /* Result r1 = hasDomain(user);
         if(!r1.isOK()) {
             Log.info("User not found");
             return Result.error(r1.error());
-        }
+        }*/
 
         List<Message> newMessages = new LinkedList<>();
         //Add their new messages

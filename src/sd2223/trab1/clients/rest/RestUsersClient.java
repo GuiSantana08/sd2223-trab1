@@ -37,14 +37,6 @@ public class RestUsersClient extends RestClient implements Users {
         return super.toJavaResult(r, User.class);
     }
 
-    private Result<Void> clt_verifyPassword(String name, String pwd) {
-        Response r = target.path(name).path(UsersService.PWD)
-                .queryParam(UsersService.PWD, pwd).request()
-                .get();
-
-        return super.toJavaResult(r, Void.class);
-    }
-
     private Result<User> clt_updateUser(String name, String pwd, User user) {
         Response r = target.path(name)
                 .queryParam(UsersService.PWD, pwd).request().accept(MediaType.APPLICATION_JSON)
