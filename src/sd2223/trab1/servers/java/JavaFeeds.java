@@ -32,6 +32,8 @@ public class JavaFeeds implements Feeds {
      */
     private final Map<String, List<Message>> userMessages;
 
+    private final Map<Long, Message> messages;
+
     /**
      * Map of users subscribed by user.
      */
@@ -46,6 +48,7 @@ public class JavaFeeds implements Feeds {
     public JavaFeeds() {
         userMessages = new ConcurrentHashMap<>();
         usersSubscribed = new ConcurrentHashMap<>();
+        messages = new ConcurrentHashMap<>();
         Log = Logger.getLogger(JavaFeeds.class.getName());
         msgID = 1;
         discovery = Discovery.getInstance();
@@ -120,6 +123,7 @@ public class JavaFeeds implements Feeds {
             List<Message> messages = new ArrayList<>();
             messages.add(msg);
             userMessages.put(user, messages);
+            this.messages.put(msg.getId(), msg);
         } else {
             userMessages.get(user).add(msg);
         }
@@ -157,21 +161,28 @@ public class JavaFeeds implements Feeds {
 
         // Check if user is subscribed to the message
         List<String> usersID = usersSubscribed.get(user);
-        if (usersID == null)
+        Log.info("SUBSS: " + usersID);
+        if (usersID == null) {
+            Log.info("+++User not subscribed to any user");
             return Result.error(Result.ErrorCode.NOT_FOUND);
+        }
 
         for (String userID : usersID) {
+            //Log.info("Get user messaeges in other domain");
             var partsSub = userID.split("@");
             String nameSub = partsSub[0];
             String domainSub = partsSub[1];
             if (!domain.equals(domainSub)) {
-                // //Log.info("++++++++++++++++++++++++++++++++Get messages from other domain++++++++++++++++++++++");
                 // Get user messaeges in other domain
+                Log.info("Get user messaeges in other domain");
+                Log.info( "nameSus: " + nameSub + " domain: " + domain + " domainSub: " + domainSub);
                 String serviceName = domainSub + ":" + FEEDS_SERVICE;
                 URI[] uris = discovery.knownUrisOf(serviceName, 1);
                 if (uris.length != 0) {
                     URI uri = uris[0];
+                    Log.info("URI: " + uri);
                     Result r2 = UsersClientFactory.getFeedsClient(uri).getOwnMessage(userID, mid);
+                    Log.info("Result: " + r2);
                     if (r2.isOK()) {
                         // //Log.info("Message found: " + r2.value());
                         Message m = (Message) r2.value();
@@ -313,6 +324,7 @@ public class JavaFeeds implements Feeds {
         Result r1 = hasUser(user);
         if (!r1.isOK()) {
             // //Log.info("User not found");
+            System.out.println("NAO HA USERR");
             return Result.error(r1.error());
         }
 
@@ -322,14 +334,15 @@ public class JavaFeeds implements Feeds {
             for (Message message : messages) {
                 if (message.getId() == mid) {
                     // //Log.info("Message found: " + message);
+                    System.out.println("JACKPOOOTTTT");
                     return Result.ok(message);
                 }
             }
 
         }
 
-
-        return null;
+        System.out.println("CANAAAAA");
+        return Result.error(Result.ErrorCode.NOT_FOUND);
     }
 
     @Override

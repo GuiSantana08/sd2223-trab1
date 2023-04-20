@@ -75,6 +75,17 @@ public interface FeedsService {
 	Message getMessage(@PathParam(USER) String user, @PathParam(MID) long mid);
 
 	/**
+	 * Obtains the message with id from the feed of user
+	 * A user must contact the server of her domain directly (i.e., this operation should not be
+	 * propagated to other domain)
+	 */
+	@GET
+	@Path("/own/{" + USER + "}/{" + MID + "}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Message getOwnMessage(@PathParam(USER) String user, @PathParam(MID) long mid);
+
+
+	/**
 	 * Returns a list of all messages stored in the server for a given user newer than time
 	 * (note: may be a remote user)
 	 * 

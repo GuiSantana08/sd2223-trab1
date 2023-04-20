@@ -60,8 +60,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
     }
 
     public Result<Message> clt_getMessage(String user, long mid) {
-        String midString = Long.toString(mid);
-        Response r = target.path(user + "/" + midString)
+        Response r = target.path(user)
                 .queryParam(FeedsService.MID, mid)
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
@@ -95,7 +94,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
         Response r = target
                 .path("own")
                 .path(user)
-                .queryParam(FeedsService.MID, mid)
+                .path(Long.toString(mid))
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
@@ -104,11 +103,10 @@ public class RestFeedsClient extends RestClient implements Feeds {
         else
             System.out.println("Error, HTTP error status: " + r.getStatus());
 
-        return null;
+        return Result.error(Result.ErrorCode.NOT_FOUND);
     }
 
     public Result<List> clt_getOwnMessages(String user, long time) {
-        ;
         Response r = target
                 .path("own")
                 .path(user)
@@ -124,7 +122,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
         } else {
             System.out.println("Error, HTTP error status: " + r.getStatus());
         }
-        return null;
+        return Result.error(Result.ErrorCode.NOT_FOUND);
     }
 
     private Result<Void> clt_subUser(String user, String userSub, String pwd) {

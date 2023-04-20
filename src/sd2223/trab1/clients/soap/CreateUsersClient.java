@@ -19,6 +19,5 @@ public class CreateUsersClient {
             var users = new SoapUsersClient( java.net.URI.create( serverURI ));
 
             var res = users.createUser( new User( name, pwd, domain, displayName) );
-            System.out.println( res );
         }
 }
