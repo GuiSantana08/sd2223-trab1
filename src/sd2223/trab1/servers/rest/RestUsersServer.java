@@ -1,4 +1,5 @@
 package sd2223.trab1.servers.rest;
+
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import sd2223.trab1.servers.java.Discovery;
@@ -15,12 +16,11 @@ public class RestUsersServer {
         System.setProperty("java.net.preferIPv4Stack", "true");
     }
 
-    public static final int PORT = 8080;
-    public static final String SERVICE = "UsersService";
+    public static final int PORT = 8083;
+    public static final String SERVICE = "users";
     private static final String SERVER_URI_FMT = "http://%s:%s/rest";
 
     public static String DOMAIN;
-
 
     public static void main(String[] args) {
         try {

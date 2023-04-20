@@ -8,14 +8,13 @@ import jakarta.xml.ws.Endpoint;
 
 public class SoapUsersServer {
 
-    public static final int PORT = 8080;
+    public static final int PORT = 8082;
     public static final String SERVICE_NAME = "users";
     public static String SERVER_BASE_URI = "http://%s:%s/soap";
 
     private static Logger Log = Logger.getLogger(SoapUsersServer.class.getName());
 
     public static void main(String[] args) throws Exception {
-
 
         Log.setLevel(Level.INFO);
 

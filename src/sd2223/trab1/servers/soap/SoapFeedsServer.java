@@ -8,15 +8,13 @@ import java.util.logging.Logger;
 
 public class SoapFeedsServer {
 
-
-    public static final int PORT = 8080;
+    public static final int PORT = 8081;
     public static final String SERVICE_NAME = "feeds";
     public static String SERVER_BASE_URI = "http://%s:%s/soap";
 
     private static Logger Log = Logger.getLogger(SoapFeedsServer.class.getName());
 
     public static void main(String[] args) throws Exception {
-
 
         Log.setLevel(Level.INFO);
 
