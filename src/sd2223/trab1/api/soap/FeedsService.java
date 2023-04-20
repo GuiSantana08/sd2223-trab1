@@ -69,6 +69,18 @@ public interface FeedsService {
 	List<Message> getMessages(String user, long time) throws FeedsException;
 
 	/**
+	 * Returns a list of all messages stored in the server for a given user newer than time
+	 * (note: may be a remote user)
+	 *
+	 * @param user user feed being accessed (format user@domain)
+	 * @param time the oldest time of the messages to be returned
+	 * @return	a list of messages, potentially empty;
+	 * @throws 	NOT_FOUND if the user does not exist.
+	 */
+	@WebMethod
+	List<Message> getOwnMessages(String user, long time) throws FeedsException;
+
+	/**
 	 * Subscribe a user.
 	 * A user must contact the server of her domain directly (i.e., this operation should not be
 	 * propagated to other domain)

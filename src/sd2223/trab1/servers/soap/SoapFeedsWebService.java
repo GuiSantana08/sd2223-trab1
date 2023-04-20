@@ -46,6 +46,11 @@ public class SoapFeedsWebService extends SoapWebService<FeedsException> implemen
     }
 
     @Override
+    public List<Message> getOwnMessages(String user, long time) throws FeedsException {
+        return super.fromJavaResult(impl.getOwnMessages(user, time));
+    }
+
+    @Override
     public void subUser(String user, String userSub, String pwd) throws FeedsException {
          super.fromJavaResult(impl.subUser(user, userSub, pwd));
 

@@ -50,6 +50,11 @@ public class SoapFeedsClient extends SoapClient implements Feeds {
     }
 
     @Override
+    public Result<List> getOwnMessages(String user, long time) {
+        return super.reTry(() -> super.toJavaResult(() -> stub().getOwnMessages(user, time)));
+    }
+
+    @Override
     public Result<Void> subUser(String user, String userSub, String pwd) {
         return super.reTry(() -> super.toJavaResult(() -> stub().subUser(user, userSub, pwd)));
 

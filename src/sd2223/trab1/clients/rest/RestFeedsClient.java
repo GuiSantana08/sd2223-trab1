@@ -13,17 +13,23 @@ import sd2223.trab1.api.Message;
 import sd2223.trab1.api.java.Feeds;
 import sd2223.trab1.api.java.Result;
 import sd2223.trab1.api.rest.FeedsService;
+import sd2223.trab1.servers.java.JavaFeeds;
+
+import java.util.logging.Logger;
 
 public class RestFeedsClient extends RestClient implements Feeds {
 
     private static final String DIR = "/";
     private static final String SUB = "/sub";
 
+    private static Logger Log;
+
     final WebTarget target;
 
     public RestFeedsClient(URI serverURI) {
         super(serverURI);
         target = client.target(serverURI).path(FeedsService.PATH);
+        Log = Logger.getLogger(JavaFeeds.class.getName());
     }
 
     private Result<Long> clt_postMessage(String user, String pwd, Message msg) {
@@ -56,6 +62,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
     public Result<Message> clt_getMessage(String user, long mid) {
         String midString = Long.toString(mid);
         Response r = target.path(user + "/" + midString)
+                .queryParam(FeedsService.MID, mid)
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
@@ -69,7 +76,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
 
     public Result<List> clt_getMessages(String user, long time) {
         Response r = target.path(user)
-                .queryParam(FeedsService.MID, time)
+                .queryParam(FeedsService.TIME, time)
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
@@ -83,6 +90,24 @@ public class RestFeedsClient extends RestClient implements Feeds {
             System.out.println("Error, HTTP error status: " + r.getStatus());
         }
 
+        return null;
+    }
+
+    public Result<List> clt_getOwnMessages(String user, long time) {;
+        Response r = target
+                .path("own")
+                .path(user)
+                .queryParam(FeedsService.TIME, time)
+                .request()
+                .accept(MediaType.APPLICATION_JSON)
+                .get();
+        Log.info(r.toString());
+        if(r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity()) {
+            List<Message> messages = r.readEntity(new GenericType<List<Message>>(){});
+            return Result.ok(messages);
+        }else {
+            System.out.println("Error, HTTP error status: " + r.getStatus());
+        }
         return null;
     }
 
@@ -137,6 +162,11 @@ public class RestFeedsClient extends RestClient implements Feeds {
     @Override
     public Result<List> getMessages(String user, long time) {
         return super.reTry(() -> clt_getMessages(user, time));
+    }
+
+    @Override
+    public Result<List> getOwnMessages(String user, long time) {
+        return super.reTry(() -> clt_getOwnMessages(user, time));
     }
 
     @Override

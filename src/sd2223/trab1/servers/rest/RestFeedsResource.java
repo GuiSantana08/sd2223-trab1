@@ -35,6 +35,11 @@ public class RestFeedsResource  extends RestResource implements FeedsService {
     }
 
     @Override
+    public List<Message> getOwnMessages(String user, long time) {
+        return super.fromJavaResult(impl.getOwnMessages(user, time));
+    }
+
+    @Override
     public void subUser(String user, String userSub, String pwd) {
         super.fromJavaResult(impl.subUser(user, userSub, pwd));
     }
