@@ -83,13 +83,26 @@ public class RestFeedsClient extends RestClient implements Feeds {
         if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity()) {
             List<Message> messages = r.readEntity(new GenericType<List<Message>>() {
             });
-            List<Message> filtered = messages.stream()
-                    .filter(m -> m.getId() < time)
-                    .collect(Collectors.toList());
-            return Result.ok(filtered);
+            return Result.ok(messages);
         } else {
             System.out.println("Error, HTTP error status: " + r.getStatus());
         }
+
+        return null;
+    }
+
+    public Result<Message> clt_getOwnMessage(String user, long mid) {
+        Response r = target
+                .path("own")
+                .path(user)
+                .queryParam(FeedsService.MID, mid)
+                .request()
+                .accept(MediaType.APPLICATION_JSON)
+                .get();
+        if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
+            return super.toJavaResult(r, Message.class);
+        else
+            System.out.println("Error, HTTP error status: " + r.getStatus());
 
         return null;
     }
@@ -167,6 +180,11 @@ public class RestFeedsClient extends RestClient implements Feeds {
     @Override
     public Result<List> getMessages(String user, long time) {
         return super.reTry(() -> clt_getMessages(user, time));
+    }
+
+    @Override
+    public Result<Message> getOwnMessage(String user, long mid) {
+        return super.reTry(() -> clt_getOwnMessage(user, mid));
     }
 
     @Override

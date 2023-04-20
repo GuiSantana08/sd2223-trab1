@@ -165,21 +165,18 @@ public class JavaFeeds implements Feeds {
             String nameSub = partsSub[0];
             String domainSub = partsSub[1];
             if (!domain.equals(domainSub)) {
-                // //Log.info("++++++++++++++++++++++++++++++++Get messages from other
-                // domain++++++++++++++++++++++");
+                // //Log.info("++++++++++++++++++++++++++++++++Get messages from other domain++++++++++++++++++++++");
                 // Get user messaeges in other domain
                 String serviceName = domainSub + ":" + FEEDS_SERVICE;
                 URI[] uris = discovery.knownUrisOf(serviceName, 1);
-                if (uris.length == 0) {
-                    // //Log.info("No known URI for service " + serviceName);
-                    return Result.error(Result.ErrorCode.NOT_FOUND);
-                }
-                URI uri = uris[0];
-                Result r2 = UsersClientFactory.getFeedsClient(uri).getMessage(userID, mid);
-                if (r2.isOK()) {
-                    // //Log.info("Message found: " + r2.value());
-                    Message m = (Message) r2.value();
-                    return Result.ok(m);
+                if (uris.length != 0) {
+                    URI uri = uris[0];
+                    Result r2 = UsersClientFactory.getFeedsClient(uri).getOwnMessage(userID, mid);
+                    if (r2.isOK()) {
+                        // //Log.info("Message found: " + r2.value());
+                        Message m = (Message) r2.value();
+                        return Result.ok(m);
+                    }
                 }
             } else {
                 // Check if user has the message
@@ -302,6 +299,37 @@ public class JavaFeeds implements Feeds {
         }
 
         return Result.ok(newMessages);
+    }
+
+    @Override
+    public Result<Message> getOwnMessage(String user, long mid) {
+        Log.info("GetOwnMessage: user = " + user + ", mid = " + mid);
+
+        // Check if user and time is valid
+        if (user == null && mid <= 0) {
+            return Result.error(Result.ErrorCode.BAD_REQUEST);
+        }
+
+        Result r1 = hasUser(user);
+        if (!r1.isOK()) {
+            // //Log.info("User not found");
+            return Result.error(r1.error());
+        }
+
+        // Check if user has the message
+        List<Message> messages = userMessages.get(user);
+        if (messages != null) {
+            for (Message message : messages) {
+                if (message.getId() == mid) {
+                    // //Log.info("Message found: " + message);
+                    return Result.ok(message);
+                }
+            }
+
+        }
+
+
+        return null;
     }
 
     @Override

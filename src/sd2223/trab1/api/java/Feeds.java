@@ -14,6 +14,8 @@ public interface Feeds {
 
     Result<List> getMessages(String user, long time);
 
+    Result<Message> getOwnMessage(String user, long mid);
+
     Result<List> getOwnMessages(String user, long time);
 
     Result<Void> subUser(String user, String userSub, String pwd);

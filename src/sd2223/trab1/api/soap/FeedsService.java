@@ -57,6 +57,19 @@ public interface FeedsService {
 	Message getMessage(String user, long mid) throws FeedsException;
 
 	/**
+	 * Obtains the message with id from the feed of user
+	 *  A user must contact the server of her domain directly (i.e., this operation should not be
+	 *  propagated to other domain)
+	 *
+	 * @param user user feed being accessed (format user@domain)
+	 * @param mid the oldest time of the messages to be returned
+	 * @return	a list of messages, potentially empty;
+	 * @throws 	NOT_FOUND if the user does not exist.
+	 */
+	Message getOwnMessage(String user, long mid) throws FeedsException;
+
+
+	/**
 	 * Returns a list of all messages stored in the server for a given user newer than time
 	 * (note: may be a remote user)
 	 * 
@@ -69,8 +82,19 @@ public interface FeedsService {
 	List<Message> getMessages(String user, long time) throws FeedsException;
 
 	/**
+	 * Obtains the message with id from the feed of user
+	 *
+	 * @param user user feed being accessed (format user@domain)
+	 * @param mid id of the message
+	 *
+	 * @return	the message if it exists;
+	 * @throws	NOT_FOUND	if the user or the message does not exist
+	 */
+
+	/**
 	 * Returns a list of all messages stored in the server for a given user newer than time
-	 * (note: may be a remote user)
+	 * A user must contact the server of her domain directly (i.e., this operation should not be
+	 * propagated to other domain)
 	 *
 	 * @param user user feed being accessed (format user@domain)
 	 * @param time the oldest time of the messages to be returned
@@ -116,4 +140,5 @@ public interface FeedsService {
 	 */
 	@WebMethod
 	List<String> listSubs(String user) throws FeedsException;
+
 }
