@@ -38,7 +38,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
                 .queryParam(FeedsService.PWD, pwd).request()
                 .accept(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(msg, MediaType.APPLICATION_JSON));
-        if(r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
+        if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
             return super.toJavaResult(r, Long.class);
         else
             System.out.println("Error, HTTP error status: " + r.getStatus());
@@ -51,7 +51,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
                 .queryParam(FeedsService.PWD, pwd).request()
                 .accept(MediaType.APPLICATION_JSON)
                 .delete();
-        if(r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
+        if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
             return super.toJavaResult(r, void.class);
         else
             System.out.println("Error, HTTP error status: " + r.getStatus());
@@ -66,7 +66,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
-        if(r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
+        if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
             return super.toJavaResult(r, Message.class);
         else
             System.out.println("Error, HTTP error status: " + r.getStatus());
@@ -80,20 +80,22 @@ public class RestFeedsClient extends RestClient implements Feeds {
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
-        if(r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity()) {
-            List<Message> messages = r.readEntity(new GenericType<List<Message>>(){});
+        if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity()) {
+            List<Message> messages = r.readEntity(new GenericType<List<Message>>() {
+            });
             List<Message> filtered = messages.stream()
                     .filter(m -> m.getId() < time)
                     .collect(Collectors.toList());
             return Result.ok(filtered);
-        }else {
+        } else {
             System.out.println("Error, HTTP error status: " + r.getStatus());
         }
 
         return null;
     }
 
-    public Result<List> clt_getOwnMessages(String user, long time) {;
+    public Result<List> clt_getOwnMessages(String user, long time) {
+        ;
         Response r = target
                 .path("own")
                 .path(user)
@@ -101,11 +103,12 @@ public class RestFeedsClient extends RestClient implements Feeds {
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
-        Log.info(r.toString());
-        if(r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity()) {
-            List<Message> messages = r.readEntity(new GenericType<List<Message>>(){});
+        // Log.info(r.toString());
+        if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity()) {
+            List<Message> messages = r.readEntity(new GenericType<List<Message>>() {
+            });
             return Result.ok(messages);
-        }else {
+        } else {
             System.out.println("Error, HTTP error status: " + r.getStatus());
         }
         return null;
@@ -115,7 +118,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
         Response r = target.path(user + DIR + SUB + DIR + userSub)
                 .queryParam(FeedsService.PWD, pwd).request()
                 .accept(MediaType.APPLICATION_JSON).post(Entity.entity(null, MediaType.APPLICATION_JSON));
-        if(r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
+        if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
             return super.toJavaResult(r, void.class);
         else
             System.out.println("Error, HTTP error status: " + r.getStatus());
@@ -127,7 +130,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
         Response r = target.path(user + DIR + SUB + DIR + userSub)
                 .queryParam(FeedsService.PWD, pwd).request()
                 .accept(MediaType.APPLICATION_JSON).delete();
-        if(r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
+        if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
             return super.toJavaResult(r, void.class);
         else
             System.out.println("Error, HTTP error status: " + r.getStatus());
@@ -139,19 +142,21 @@ public class RestFeedsClient extends RestClient implements Feeds {
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
-        if(r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
+        if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity())
             return super.toJavaResult(r, List.class);
         else
             System.out.println("Error, HTTP error status: " + r.getStatus());
         return null;
     }
+
     @Override
     public Result<Long> postMessage(String user, String pwd, Message msg) {
-        return  super.reTry(() -> clt_postMessage(user, pwd, msg));
+        return super.reTry(() -> clt_postMessage(user, pwd, msg));
     }
+
     @Override
     public Result<Void> removeFromPersonalFeed(String user, long mid, String pwd) {
-        return  super.reTry(() -> clt_removeFromPersonalFeed(user, mid, pwd));
+        return super.reTry(() -> clt_removeFromPersonalFeed(user, mid, pwd));
     }
 
     @Override
@@ -174,7 +179,6 @@ public class RestFeedsClient extends RestClient implements Feeds {
         return super.reTry(() -> clt_subUser(user, userSub, pwd));
     }
 
-
     @Override
     public Result<Void> unsubscribeUser(String user, String userSub, String pwd) {
         return super.reTry(() -> clt_unsubscribeUser(user, userSub, pwd));
@@ -185,6 +189,5 @@ public class RestFeedsClient extends RestClient implements Feeds {
         return super.reTry(() -> clt_listSubs(user));
 
     }
-
 
 }

@@ -31,12 +31,12 @@ public class RestFeedsServer {
             JdkHttpServerFactory.createHttpServer(URI.create(serverURI.replace(ip, "0.0.0.0")), config);
 
             String serviceName = domain + ":" + SERVICE;
-            Log.info(String.format("%s Server ready @ %s\n", SERVICE, serverURI));
+            // Log.info(String.format("%s Server ready @ %s\n", SERVICE, serverURI));
             // More code can be executed here...
             Discovery.getInstance().announce(serviceName, serverURI);
 
         } catch (Exception e) {
-            Log.severe(e.getMessage());
+            // Log.severe(e.getMessage());
         }
     }
 }

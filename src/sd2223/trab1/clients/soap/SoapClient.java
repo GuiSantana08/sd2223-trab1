@@ -30,7 +30,7 @@ abstract class SoapClient {
         this.uri = uri;
     }
 
-    protected void setTimeouts(BindingProvider port ) {
+    protected void setTimeouts(BindingProvider port) {
         port.getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
         port.getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, READ_TIMEOUT);
     }
@@ -41,10 +41,9 @@ abstract class SoapClient {
                 return func.get();
             } catch (WebServiceException x) {
                 x.printStackTrace();
-                Log.fine("Timeout: " + x.getMessage());
+                // Log.fine("Timeout: " + x.getMessage());
                 sleep_ms(RETRY_SLEEP);
-            }
-            catch (Exception x) {
+            } catch (Exception x) {
                 x.printStackTrace();
                 return Result.error(ErrorCode.INTERNAL_ERROR);
             }
@@ -52,32 +51,30 @@ abstract class SoapClient {
     }
 
     protected <R> Result<R> toJavaResult(ResultSupplier<R> supplier) {
-        try{
+        try {
             return ok(supplier.get());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Result.error(getErrorCode(e));
         }
     }
 
-    protected <R> Result<R> toJavaResult( VoidSupplier r) {
+    protected <R> Result<R> toJavaResult(VoidSupplier r) {
         try {
             r.run();
             return ok();
-        }
-        catch (WebServiceException x) {
+        } catch (WebServiceException x) {
             throw x;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Result.error(getErrorCode(e));
         }
     }
 
     private ErrorCode getErrorCode(Exception e) {
-        try{
+        try {
             return ErrorCode.valueOf(e.getMessage());
-        }catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException ex) {
             return ErrorCode.INTERNAL_ERROR;
         }
     }

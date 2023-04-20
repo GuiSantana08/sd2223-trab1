@@ -35,12 +35,12 @@ public class RestUsersServer {
             JdkHttpServerFactory.createHttpServer(URI.create(serverURI.replace(ip, "0.0.0.0")), config);
 
             String serviceName = DOMAIN + ":" + SERVICE;
-            Log.info(String.format("%s Server ready @ %s\n", serviceName, serverURI));
+            // Log.info(String.format("%s Server ready @ %s\n", serviceName, serverURI));
             // More code can be executed here...
             Discovery.getInstance().announce(serviceName, serverURI);
 
         } catch (Exception e) {
-            Log.severe(e.getMessage());
+            // Log.severe(e.getMessage());
         }
     }
 }

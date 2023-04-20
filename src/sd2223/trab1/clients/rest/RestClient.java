@@ -44,7 +44,7 @@ public class RestClient {
             try {
                 return func.get();
             } catch (ProcessingException x) {
-                Log.fine("Timeout: " + x.getMessage());
+                // Log.fine("Timeout: " + x.getMessage());
                 sleep_ms(RETRY_SLEEP);
             } catch (Exception x) {
                 x.printStackTrace();
@@ -68,8 +68,8 @@ public class RestClient {
         }
     }
 
-    public static ErrorCode getErrorCodeFrom(int status){
-        return switch (status){
+    public static ErrorCode getErrorCodeFrom(int status) {
+        return switch (status) {
             case 200, 209 -> ErrorCode.OK;
             case 400 -> ErrorCode.BAD_REQUEST;
             case 401 -> ErrorCode.UNAUTHORIZED;
@@ -90,7 +90,7 @@ public class RestClient {
     }
 
     private void sleep_ms(int retrySleep) {
-        try{
+        try {
             Thread.sleep(retrySleep);
         } catch (InterruptedException e) {
             e.printStackTrace();

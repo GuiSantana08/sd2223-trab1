@@ -22,9 +22,9 @@ public class JavaUsers implements Users {
     public JavaUsers() {
     }
 
-
     private boolean badUserCreateData(User user) {
-        return user == null || user.getName() == null || user.getPwd() == null || user.getDisplayName() == null || user.getDomain() == null;
+        return user == null || user.getName() == null || user.getPwd() == null || user.getDisplayName() == null
+                || user.getDomain() == null;
     }
 
     private User getUser(String name) {
@@ -33,44 +33,45 @@ public class JavaUsers implements Users {
 
     @Override
     public Result<String> createUser(User user) {
-        Log.info("createUser : " + user);
+        // Log.info("createUser : " + user);
 
-        //Check if user data is valid
-        if(badUserCreateData(user)) {
-            Log.info("User object invalid.");
+        // Check if user data is valid
+        if (badUserCreateData(user)) {
+            // Log.info("User object invalid.");
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
 
-        //check if user already exists
-        if(users.containsKey(user.getName())) {
-            Log.info("User already exists.");
+        // check if user already exists
+        if (users.containsKey(user.getName())) {
+            // Log.info("User already exists.");
             return Result.error(Result.ErrorCode.CONFLICT);
         }
 
         users.put(user.getName(), user);
 
-        return Result.ok(user.getName()+"@"+user.getDomain());
+        return Result.ok(user.getName() + "@" + user.getDomain());
     }
+
     @Override
     public Result<User> getUser(String name, String pwd) {
-        Log.info("getUser : user = " + name + "; pwd = " + pwd);
+        // Log.info("getUser : user = " + name + "; pwd = " + pwd);
 
-        //Check if user is valid
-        if(name == null || pwd == null) {
-            Log.info("Name or Password null.");
+        // Check if user is valid
+        if (name == null || pwd == null) {
+            // Log.info("Name or Password null.");
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
 
         User u = getUser(name);
-        //Check if user exists
-        if(u == null) {
-            Log.info("User does not exist.");
+        // Check if user exists
+        if (u == null) {
+            // Log.info("User does not exist.");
             return Result.error(Result.ErrorCode.NOT_FOUND);
         }
 
-        //Check if the password is correct
-        if(!u.getPwd().equals(pwd)) {
-            Log.info("Password is incorrect.");
+        // Check if the password is correct
+        if (!u.getPwd().equals(pwd)) {
+            // Log.info("Password is incorrect.");
             return Result.error(Result.ErrorCode.FORBIDDEN);
         }
         return Result.ok(u);
@@ -78,49 +79,48 @@ public class JavaUsers implements Users {
 
     @Override
     public Result<User> updateUser(String name, String pwd, User user) {
-        //return Result.error(Result.ErrorCode.NOT_IMPLEMENTED);
-        Log.info("updateUser : user = " + name + "; pwd = " + pwd);
+        // return Result.error(Result.ErrorCode.NOT_IMPLEMENTED);
+        // Log.info("updateUser : user = " + name + "; pwd = " + pwd);
 
-        if(name == null || pwd == null) {
-            Log.info("UserId or password or user null");
+        if (name == null || pwd == null) {
+            // Log.info("UserId or password or user null");
             return Result.error(Result.ErrorCode.BAD_REQUEST);
-            //throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            // throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         User user1 = getUser(name);
 
-        //Check if user exists
-        if(user1 == null) {
-            Log.info("User does not exist.");
+        // Check if user exists
+        if (user1 == null) {
+            // Log.info("User does not exist.");
             return Result.error(Result.ErrorCode.NOT_FOUND);
-            //throw new WebApplicationException(Response.Status.NOT_FOUND);
+            // throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
-        //Check if the password is correct
-        if(!user1.getPwd().equals(pwd))
-        {
-            Log.info("Password is incorrect.");
+        // Check if the password is correct
+        if (!user1.getPwd().equals(pwd)) {
+            // Log.info("Password is incorrect.");
             return Result.error(Result.ErrorCode.FORBIDDEN);
-            //throw new WebApplicationException(Response.Status.FORBIDDEN);
+            // throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
 
-        //Check if the username is the same
-        if(!user1.getName().equals(user.getName())) {
-            Log.info("Username is different.");
+        // Check if the username is the same
+        if (!user1.getName().equals(user.getName())) {
+            // Log.info("Username is different.");
             return Result.error(Result.ErrorCode.BAD_REQUEST);
-            //throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            // throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         String newPwd = user.getPwd();
-        if(newPwd != null) {
+        if (newPwd != null) {
             user1.setPwd(newPwd);
         }
         String newDisplayName = user.getDisplayName();
-        if(newDisplayName != null) {
+        if (newDisplayName != null) {
             user1.setDisplayName(newDisplayName);
         }
         String newDomain = user.getDomain();
-        if(newDomain != null) {
+        if (newDomain != null) {
             user1.setDomain(newDomain);
         }
 
@@ -129,45 +129,44 @@ public class JavaUsers implements Users {
 
     @Override
     public Result<User> deleteUser(String name, String pwd) {
-        Log.info("deleteUser : user = " + name + "; pwd = " + pwd);
-        //Check if user is valid
-        if(name == null || pwd == null) {
-            Log.info("UserId or Password null.");
+        // Log.info("deleteUser : user = " + name + "; pwd = " + pwd);
+        // Check if user is valid
+        if (name == null || pwd == null) {
+            // Log.info("UserId or Password null.");
             return Result.error(Result.ErrorCode.BAD_REQUEST);
-            //throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            // throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         User user = users.get(name);
 
-        //Check if user exists
-        if(user == null) {
-            Log.info("User does not exist.");
+        // Check if user exists
+        if (user == null) {
+            // Log.info("User does not exist.");
             return Result.error(Result.ErrorCode.NOT_FOUND);
-            //throw new WebApplicationException(Response.Status.NOT_FOUND);
+            // throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
-        //Check if the password is correct
-        if(!user.getPwd().equals(pwd)) {
-            Log.info("Password is incorrect.");
+        // Check if the password is correct
+        if (!user.getPwd().equals(pwd)) {
+            // Log.info("Password is incorrect.");
             return Result.error(Result.ErrorCode.FORBIDDEN);
-            //throw new WebApplicationException(Response.Status.FORBIDDEN);
+            // throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
-            users.remove(name);
-            Log.info("User deleted.");
-            return Result.ok(user);
+        users.remove(name);
+        // Log.info("User deleted.");
+        return Result.ok(user);
     }
 
     @Override
     public Result<List> searchUsers(String pattern) {
-        List<User> list =  new ArrayList<>();
-        Log.info("searchUsers : pattern = " + pattern);
+        List<User> list = new ArrayList<>();
+        // Log.info("searchUsers : pattern = " + pattern);
 
         Set<String> keys = users.keySet();
         Iterator<String> it = keys.iterator();
 
-        if(pattern == "") {
+        if (pattern == "") {
             list.addAll(users.values());
-        }
-        else {
+        } else {
             while (it.hasNext()) {
                 String key = it.next();
                 User u = users.get(key);
@@ -179,6 +178,5 @@ public class JavaUsers implements Users {
 
         return Result.ok(list);
     }
-
 
 }

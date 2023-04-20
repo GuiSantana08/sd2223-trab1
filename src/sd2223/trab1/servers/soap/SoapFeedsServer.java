@@ -16,13 +16,14 @@ public class SoapFeedsServer {
 
     public static void main(String[] args) throws Exception {
 
-        Log.setLevel(Level.INFO);
+        // Log.setLevel(Level.INFO);
 
         String ip = InetAddress.getLocalHost().getHostAddress();
         String serverURI = String.format(SERVER_BASE_URI, ip, PORT);
 
         Endpoint.publish(serverURI.replace(ip, "0.0.0.0"), new SoapUsersWebService());
 
-        Log.info(String.format("%s Soap Server ready @ %s\n", SERVICE_NAME, serverURI));
+        // Log.info(String.format("%s Soap Server ready @ %s\n", SERVICE_NAME,
+        // serverURI));
     }
 }

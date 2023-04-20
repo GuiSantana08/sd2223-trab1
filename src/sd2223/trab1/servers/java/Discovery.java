@@ -22,7 +22,7 @@ public interface Discovery {
 	 * @param serviceName - the name of the service
 	 * @param serviceURI  - the uri of the service
 	 */
-	 void announce(String serviceName, String serviceURI);
+	void announce(String serviceName, String serviceURI);
 
 	/**
 	 * Get discovered URIs for a given service name
@@ -39,7 +39,7 @@ public interface Discovery {
 	 * 
 	 * @return the singleton instance of the Discovery service
 	 */
-	 static Discovery getInstance() {
+	static Discovery getInstance() {
 		return DiscoveryImpl.getInstance();
 	}
 }
@@ -68,7 +68,6 @@ class DiscoveryImpl implements Discovery {
 
 	private static Discovery singleton;
 
-
 	synchronized static Discovery getInstance() {
 		if (singleton == null) {
 			singleton = new DiscoveryImpl();
@@ -82,8 +81,8 @@ class DiscoveryImpl implements Discovery {
 
 	@Override
 	public void announce(String serviceName, String serviceURI) {
-		Log.info(String.format("Starting Discovery announcements on: %s for: %s -> %s\n", DISCOVERY_ADDR, serviceName,
-				serviceURI));
+		// Log.info(String.format("Starting Discovery announcements on: %s for: %s ->
+		// %s\n", DISCOVERY_ADDR, serviceName, serviceURI));
 
 		var pktBytes = String.format("%s%s%s", serviceName, DELIMITER, serviceURI).getBytes();
 		var pkt = new DatagramPacket(pktBytes, pktBytes.length, DISCOVERY_ADDR);
@@ -119,8 +118,8 @@ class DiscoveryImpl implements Discovery {
 	}
 
 	private void startListener() {
-		Log.info(String.format("Starting discovery on multicast group: %s, port: %d\n", DISCOVERY_ADDR.getAddress(),
-				DISCOVERY_ADDR.getPort()));
+		// Log.info(String.format("Starting discovery on multicast group: %s, port:
+		// %d\n", DISCOVERY_ADDR.getAddress(), DISCOVERY_ADDR.getPort()));
 
 		new Thread(() -> {
 			try (var ms = new MulticastSocket(DISCOVERY_ADDR.getPort())) {
@@ -131,7 +130,7 @@ class DiscoveryImpl implements Discovery {
 						ms.receive(pkt);
 
 						var msg = new String(pkt.getData(), 0, pkt.getLength());
-						Log.info(String.format("Received in DISCOVERY: %s", msg));
+						// Log.info(String.format("Received in DISCOVERY: %s", msg));
 
 						var parts = msg.split(DELIMITER);
 						if (parts.length == 2) {
@@ -142,8 +141,7 @@ class DiscoveryImpl implements Discovery {
 							synchronized (listURIs) {
 								if (list != null) {
 									list.add(uri);
-								}
-								else {
+								} else {
 									list = new ArrayList<>();
 									list.add(uri);
 									listURIs.put(serviceName, list);
