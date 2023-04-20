@@ -34,9 +34,10 @@ public class RestUsersServer {
             String serverURI = String.format(SERVER_URI_FMT, ip, PORT);
             JdkHttpServerFactory.createHttpServer(URI.create(serverURI.replace(ip, "0.0.0.0")), config);
 
-            Log.info(String.format("%s Server ready @ %s\n", SERVICE, serverURI));
+            String serviceName = DOMAIN + ":" + SERVICE;
+            Log.info(String.format("%s Server ready @ %s\n", serviceName, serverURI));
             // More code can be executed here...
-            Discovery.getInstance().announce(DOMAIN, SERVICE, serverURI);
+            Discovery.getInstance().announce(serviceName, serverURI);
 
         } catch (Exception e) {
             Log.severe(e.getMessage());

@@ -19,11 +19,10 @@ public interface Discovery {
 	/**
 	 * Used to announce the URI of the given service name.
 	 *
-	 * @param domainName - the name of the domain
 	 * @param serviceName - the name of the service
 	 * @param serviceURI  - the uri of the service
 	 */
-	 void announce(String domainName, String serviceName, String serviceURI);
+	 void announce(String serviceName, String serviceURI);
 
 	 URI uriServDom(String dom, String serv);
 
@@ -73,6 +72,7 @@ class DiscoveryImpl implements Discovery {
 
 	private static Discovery singleton;
 
+
 	synchronized static Discovery getInstance() {
 		if (singleton == null) {
 			singleton = new DiscoveryImpl();
@@ -85,11 +85,11 @@ class DiscoveryImpl implements Discovery {
 	}
 
 	@Override
-	public void announce(String domainName, String serviceName, String serviceURI) {
+	public void announce(String serviceName, String serviceURI) {
 		Log.info(String.format("Starting Discovery announcements on: %s for: %s -> %s\n", DISCOVERY_ADDR, serviceName,
 				serviceURI));
 
-		var pktBytes = String.format("%s:%s%s%s",domainName, serviceName, DELIMITER, serviceURI).getBytes();
+		var pktBytes = String.format("%s%s%s", serviceName, DELIMITER, serviceURI).getBytes();
 		var pkt = new DatagramPacket(pktBytes, pktBytes.length, DISCOVERY_ADDR);
 
 		// start thread to send periodic announcements
@@ -141,17 +141,14 @@ class DiscoveryImpl implements Discovery {
 						ms.receive(pkt);
 
 						var msg = new String(pkt.getData(), 0, pkt.getLength());
-						Log.info(String.format("Received: %s", msg));
+						Log.info(String.format("Received in DISCOVERY: %s", msg));
 
 						var parts = msg.split(DELIMITER);
 						if (parts.length == 2) {
 							// TODO: complete by storing the decoded announcements...
-							var parts2 = parts[0].split(":");
-							String domainName = parts2[0];
-							String serviceName = parts2[1];
+							String serviceName = parts[0];
 							var uri = URI.create(parts[1]);
 							var list = listURIs.get(serviceName);
-							var mapDom = servDomURIS.get(domainName);
 							synchronized (listURIs) {
 								if (list != null) {
 									list.add(uri);
@@ -160,14 +157,6 @@ class DiscoveryImpl implements Discovery {
 									list = new ArrayList<>();
 									list.add(uri);
 									listURIs.put(serviceName, list);
-								}
-								if (mapDom != null) {
-									mapDom.put(serviceName, uri);
-								}
-								else {
-									mapDom = new HashMap<>();
-									mapDom.put(serviceName, uri);
-									servDomURIS.put(domainName, mapDom);
 								}
 							}
 						}

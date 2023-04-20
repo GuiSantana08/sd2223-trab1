@@ -54,8 +54,4 @@ public class SoapUsersClient extends SoapClient implements Users {
         return super.reTry(() -> super.toJavaResult(() -> stub().searchUsers(pattern)));
     }
 
-    @Override
-    public Result<Void> verifyPassword(String name, String pwd) {
-        return super.reTry(() -> super.toJavaResult(() -> stub().verifyPassword(name, pwd)));
-    }
 }

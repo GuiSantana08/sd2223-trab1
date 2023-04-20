@@ -79,6 +79,7 @@ public class RestUsersClient extends RestClient implements Users {
         return null;
     }
 
+
     @Override
     public Result<String> createUser(User user) {
         return super.reTry(() -> clt_createUser(user));
@@ -104,8 +105,6 @@ public class RestUsersClient extends RestClient implements Users {
         return super.reTry(() -> clt_searchUsers(pattern));
     }
 
-    @Override
-    public Result<Void> verifyPassword(String name, String pwd) {
-        return super.reTry(() -> clt_verifyPassword(name, pwd));
-    }
+
+
 }

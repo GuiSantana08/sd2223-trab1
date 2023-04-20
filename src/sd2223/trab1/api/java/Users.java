@@ -17,5 +17,5 @@ public interface Users {
 
 	Result<List> searchUsers(String pattern);
 
-	Result<Void> verifyPassword(String name, String pwd);
+
 }

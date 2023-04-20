@@ -173,21 +173,12 @@ public class JavaUsers implements Users {
                 User u = users.get(key);
                 if (u.getName().contains(pattern)) {
                     list.add(u);
-                    System.out.println("ADICIONOUUUUU" + u.getName());
                 }
             }
         }
 
-        System.out.println("FUNCIONOUUUUUUU");
         return Result.ok(list);
     }
 
-    @Override
-    public Result<Void> verifyPassword(String name, String pwd) {
-        Result<User> result = getUser(name, pwd);
-        if(result.isOK())
-            return Result.ok();
-        else
-            return Result.error(result.error());
-    }
+
 }
