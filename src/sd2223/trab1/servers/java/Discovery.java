@@ -24,8 +24,6 @@ public interface Discovery {
 	 */
 	 void announce(String serviceName, String serviceURI);
 
-	 URI uriServDom(String dom, String serv);
-
 	/**
 	 * Get discovered URIs for a given service name
 	 * 
@@ -52,8 +50,6 @@ public interface Discovery {
 class DiscoveryImpl implements Discovery {
 
 	private Map<String, List<URI>> listURIs = new HashMap<>();
-
-	private Map<String, Map<String, URI>> servDomURIS = new HashMap<>();
 
 	private static Logger Log = Logger.getLogger(Discovery.class.getName());
 
@@ -120,12 +116,6 @@ class DiscoveryImpl implements Discovery {
 				uri[counter++] = (URI) it.next();
 		}
 		return uri;
-	}
-
-	public URI uriServDom(String dom, String serv){
-		System.out.println("PRINTTTTT DOS DOOMMMMMMMMMMMSSMMMMSSMMM");
-		System.out.println(servDomURIS.get(dom));
-		return servDomURIS.get(dom).get(serv);
 	}
 
 	private void startListener() {

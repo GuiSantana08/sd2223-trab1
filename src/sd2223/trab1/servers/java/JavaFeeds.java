@@ -23,7 +23,7 @@ import static sd2223.trab1.clients.UsersClientFactory.getUserClient;
 
 public class JavaFeeds implements Feeds {
 
-    public static final String USERS_SERVICE = "UsersService";
+    public static final String USERS_SERVICE = "users";
 
     /**
      * Map of message by user.
