@@ -108,12 +108,20 @@ public class JavaFeeds implements Feeds {
         if (user == null || pwd == null || msg == null) {
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
+        var parts = user.split("@");
+        String domain = parts[1];
+
+        // Check if user is in domain
+        if (!domain.equals(DOMAIN)) {
+            return Result.error(Result.ErrorCode.BAD_REQUEST);
+        }
 
         Result v = hasUser(user);
         if (!v.isOK()) {
             // //Log.info("User not found");
-            return Result.error(v.error());
+            return Result.error(Result.ErrorCode.NOT_FOUND);
         }
+        
         Result u = isUserValid(user, pwd);
 
         // Check if user exists
