@@ -1,3 +1,4 @@
+
 package sd2223.trab1.servers.java;
 
 import jakarta.ws.rs.WebApplicationException;
@@ -168,14 +169,14 @@ public class JavaFeeds implements Feeds {
         }
 
         for (String userID : usersID) {
-            //Log.info("Get user messaeges in other domain");
+            // Log.info("Get user messaeges in other domain");
             var partsSub = userID.split("@");
             String nameSub = partsSub[0];
             String domainSub = partsSub[1];
             if (!domain.equals(domainSub)) {
                 // Get user messaeges in other domain
                 Log.info("Get user messaeges in other domain");
-                Log.info( "nameSus: " + nameSub + " domain: " + domain + " domainSub: " + domainSub);
+                Log.info("nameSus: " + nameSub + " domain: " + domain + " domainSub: " + domainSub);
                 String serviceName = domainSub + ":" + FEEDS_SERVICE;
                 URI[] uris = discovery.knownUrisOf(serviceName, 1);
                 if (uris.length != 0) {
