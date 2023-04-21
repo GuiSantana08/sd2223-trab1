@@ -18,9 +18,11 @@ public class RestFeedsServer {
     public static final String SERVICE = "feeds";
     private static final String SERVER_URI_FMT = "http://%s:%s/rest";
 
+    public static String DOMAIN;
+
     public static void main(String[] args) {
         try {
-            String domain = args[0];
+            DOMAIN = args[0];
             String msgID = args[1];
             ResourceConfig config = new ResourceConfig();
             config.register(RestFeedsResource.class);
@@ -30,7 +32,7 @@ public class RestFeedsServer {
             String serverURI = String.format(SERVER_URI_FMT, ip, PORT);
             JdkHttpServerFactory.createHttpServer(URI.create(serverURI.replace(ip, "0.0.0.0")), config);
 
-            String serviceName = domain + ":" + SERVICE;
+            String serviceName = DOMAIN + ":" + SERVICE;
             // Log.info(String.format("%s Server ready @ %s\n", SERVICE, serverURI));
             // More code can be executed here...
             Discovery.getInstance().announce(serviceName, serverURI);
