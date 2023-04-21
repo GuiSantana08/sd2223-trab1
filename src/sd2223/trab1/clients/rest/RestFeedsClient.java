@@ -61,7 +61,7 @@ public class RestFeedsClient extends RestClient implements Feeds {
 
     public Result<Message> clt_getMessage(String user, long mid) {
         Response r = target.path(user)
-                .queryParam(FeedsService.MID, mid)
+                .path(Long.toString(mid))
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
