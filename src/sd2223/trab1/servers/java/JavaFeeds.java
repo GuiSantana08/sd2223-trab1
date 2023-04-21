@@ -13,6 +13,7 @@ import sd2223.trab1.clients.UsersClientFactory;
 
 import sd2223.trab1.servers.rest.RestFeedsServer;
 import sd2223.trab1.servers.rest.RestUsersServer;
+import sd2223.trab1.servers.soap.SoapFeedsServer;
 
 import java.io.IOException;
 import java.net.URI;
@@ -28,9 +29,7 @@ public class JavaFeeds implements Feeds {
 
     public static final String FEEDS_SERVICE = "feeds";
 
-    private static final String DOMAIN = RestFeedsServer.DOMAIN;
-
-    private static String TYPE;
+    public static String DOMAIN;
 
     /**
      * Map of message by user.
@@ -57,6 +56,7 @@ public class JavaFeeds implements Feeds {
         Log = Logger.getLogger(JavaFeeds.class.getName());
         msgID = 1;
         discovery = Discovery.getInstance();
+        DOMAIN = SoapFeedsServer.DOMAIN;
     }
 
     private Result<User> isUserValid(String user, String pwd) {
@@ -113,6 +113,7 @@ public class JavaFeeds implements Feeds {
         var parts = user.split("@");
         String domain = parts[1];
 
+        Log.info("userDom " + domain + " DOMAIN " + DOMAIN);
         // Check if user is in domain
         if (!domain.equals(DOMAIN)) {
             Log.info("SOAPPP EM RESTT");

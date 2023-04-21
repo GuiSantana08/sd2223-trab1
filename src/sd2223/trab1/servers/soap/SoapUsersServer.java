@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import jakarta.xml.ws.Endpoint;
 import sd2223.trab1.servers.java.Discovery;
+import sd2223.trab1.servers.java.JavaFeeds;
 
 public class SoapUsersServer {
 
@@ -19,6 +20,7 @@ public class SoapUsersServer {
 
     public static void main(String[] args) throws Exception {
         DOMAIN = args[0];
+
         // Log.setLevel(Level.INFO);
 
         String ip = InetAddress.getLocalHost().getHostAddress();

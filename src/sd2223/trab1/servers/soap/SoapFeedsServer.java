@@ -2,6 +2,7 @@ package sd2223.trab1.servers.soap;
 
 import jakarta.xml.ws.Endpoint;
 import sd2223.trab1.servers.java.Discovery;
+import sd2223.trab1.servers.java.JavaFeeds;
 
 import java.net.InetAddress;
 import java.util.logging.Level;
@@ -18,7 +19,12 @@ public class SoapFeedsServer {
     private static Logger Log = Logger.getLogger(SoapFeedsServer.class.getName());
 
     public static void main(String[] args) throws Exception {
+        Log.info("ARGS SISE " + args.length);
+        Log.info("ARG 0 " +  args[0] );
         DOMAIN = args[0];
+        JavaFeeds.DOMAIN = DOMAIN;
+        Log.info("DOMAIN  ARG " +  args[0] );
+        Log.info("DOMAIN  " +  DOMAIN );
         // Log.setLevel(Level.INFO);
 
         String ip = InetAddress.getLocalHost().getHostAddress();
