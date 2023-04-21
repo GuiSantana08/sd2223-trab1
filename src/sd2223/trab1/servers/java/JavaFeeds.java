@@ -1,4 +1,3 @@
-
 package sd2223.trab1.servers.java;
 
 import jakarta.ws.rs.WebApplicationException;
@@ -476,7 +475,7 @@ public class JavaFeeds implements Feeds {
         Result r2 = hasUser(userSub);
         if (!r2.isOK()) {
             // //Log.info("UserSub not found");
-            return Result.error(r2.error());
+            return Result.error(Result.ErrorCode.NOT_FOUND);
         }
         List subs = usersSubscribed.get(user);
         if (subs == null) {

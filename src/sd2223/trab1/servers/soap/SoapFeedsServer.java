@@ -1,6 +1,7 @@
 package sd2223.trab1.servers.soap;
 
 import jakarta.xml.ws.Endpoint;
+import sd2223.trab1.servers.java.Discovery;
 
 import java.net.InetAddress;
 import java.util.logging.Level;
@@ -21,9 +22,10 @@ public class SoapFeedsServer {
         String ip = InetAddress.getLocalHost().getHostAddress();
         String serverURI = String.format(SERVER_BASE_URI, ip, PORT);
 
-        Endpoint.publish(serverURI.replace(ip, "0.0.0.0"), new SoapUsersWebService());
+        Endpoint.publish(serverURI.replace(ip, "0.0.0.0"), new SoapFeedsWebService());
 
-        // Log.info(String.format("%s Soap Server ready @ %s\n", SERVICE_NAME,
-        // serverURI));
+        Log.info(String.format("%s Soap Server ready @ %s\n", SERVICE_NAME, serverURI));
+
+        Discovery.getInstance().announce(SERVICE_NAME, serverURI);
     }
 }

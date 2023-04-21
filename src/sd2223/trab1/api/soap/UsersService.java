@@ -24,7 +24,7 @@ public interface UsersService {
 	/**
 	 * Obtains the information on the user identified by name.
 	 * @param name name of the user
-	 * @param pwd password of the user
+	 * @param password password of the user
 	 * @throws UsersException otherwise
 	 */
 	@WebMethod
@@ -58,7 +58,5 @@ public interface UsersService {
 	 * @throws UsersException otherwise
 	 */
 	@WebMethod
-	List<User> searchUsers(String pattern) throws UsersException;
-
-
+	List<User> searchUsers(String pattern) throws UsersException;	
 }
