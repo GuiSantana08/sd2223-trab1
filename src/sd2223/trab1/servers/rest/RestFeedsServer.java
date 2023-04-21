@@ -3,11 +3,10 @@ package sd2223.trab1.servers.rest;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import sd2223.trab1.servers.java.Discovery;
-import sd2223.trab1.servers.java.JavaFeeds;
-
 import java.net.InetAddress;
 import java.net.URI;
 import java.util.logging.Logger;
+import sd2223.trab1.servers.java.JavaFeeds;
 
 public class RestFeedsServer {
     private static Logger Log = Logger.getLogger(RestFeedsServer.class.getName());
@@ -25,8 +24,8 @@ public class RestFeedsServer {
     public static void main(String[] args) {
         try {
             DOMAIN = args[0];
-            JavaFeeds.DOMAIN = DOMAIN;
 
+            JavaFeeds.DOMAIN = DOMAIN;
             ResourceConfig config = new ResourceConfig();
             config.register(RestFeedsResource.class);
 

@@ -10,7 +10,6 @@ import sd2223.trab1.api.java.Users;
 import sd2223.trab1.api.soap.UsersException;
 import sd2223.trab1.api.soap.UsersService;
 
-
 @WebService(serviceName = UsersService.NAME, targetNamespace = UsersService.NAMESPACE, endpointInterface = UsersService.INTERFACE)
 public class SoapUsersWebService extends SoapWebService<UsersException> implements UsersService {
 

@@ -9,14 +9,16 @@ import sd2223.trab1.servers.java.JavaFeeds;
 import java.util.List;
 
 @Singleton
-public class RestFeedsResource  extends RestResource implements FeedsService {
+public class RestFeedsResource extends RestResource implements FeedsService {
+    String domain = RestFeedsServer.DOMAIN;
+    final Feeds impl = new JavaFeeds(domain);
 
-    final Feeds impl = new JavaFeeds();
+    public RestFeedsResource() {
+    }
 
-    public RestFeedsResource() { }
     @Override
     public long postMessage(String user, String pwd, Message msg) {
-        return  super.fromJavaResult(impl.postMessage(user, pwd, msg));
+        return super.fromJavaResult(impl.postMessage(user, pwd, msg));
     }
 
     @Override

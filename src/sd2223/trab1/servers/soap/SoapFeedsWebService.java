@@ -11,17 +11,17 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @WebService(serviceName = FeedsService.NAME, targetNamespace = FeedsService.NAMESPACE, endpointInterface = FeedsService.INTERFACE)
-public class SoapFeedsWebService extends SoapWebService<FeedsException> implements FeedsService{
+public class SoapFeedsWebService extends SoapWebService<FeedsException> implements FeedsService {
 
     static Logger Log = Logger.getLogger(SoapFeedsWebService.class.getName());
 
     final Feeds impl;
+    String domain = SoapFeedsServer.DOMAIN;
 
     public SoapFeedsWebService() {
         super((result) -> new FeedsException(result.error().toString()));
-        this.impl = new JavaFeeds();
+        this.impl = new JavaFeeds(domain);
     }
-
 
     @Override
     public long postMessage(String user, String pwd, Message msg) throws FeedsException {
@@ -57,7 +57,7 @@ public class SoapFeedsWebService extends SoapWebService<FeedsException> implemen
 
     @Override
     public void subUser(String user, String userSub, String pwd) throws FeedsException {
-         super.fromJavaResult(impl.subUser(user, userSub, pwd));
+        super.fromJavaResult(impl.subUser(user, userSub, pwd));
 
     }
 
@@ -69,6 +69,6 @@ public class SoapFeedsWebService extends SoapWebService<FeedsException> implemen
 
     @Override
     public List<String> listSubs(String user) throws FeedsException {
-         return super.fromJavaResult(impl.listSubs(user));
+        return super.fromJavaResult(impl.listSubs(user));
     }
 }

@@ -13,13 +13,13 @@ import sd2223.trab1.clients.UsersClientFactory;
 
 import sd2223.trab1.servers.rest.RestFeedsServer;
 import sd2223.trab1.servers.rest.RestUsersServer;
-import sd2223.trab1.servers.soap.SoapFeedsServer;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
+import sd2223.trab1.servers.soap.SoapFeedsServer;
 
 import static sd2223.trab1.clients.UsersClientFactory.getUserClient;
 
@@ -49,14 +49,14 @@ public class JavaFeeds implements Feeds {
 
     private Discovery discovery;
 
-    public JavaFeeds() {
+    public JavaFeeds(String DOMAIN) {
         userMessages = new ConcurrentHashMap<>();
         usersSubscribed = new ConcurrentHashMap<>();
         allMessages = new ConcurrentHashMap<>();
         Log = Logger.getLogger(JavaFeeds.class.getName());
         msgID = 1;
         discovery = Discovery.getInstance();
-        DOMAIN = SoapFeedsServer.DOMAIN;
+        DOMAIN = this.DOMAIN;
     }
 
     private Result<User> isUserValid(String user, String pwd) {
@@ -104,7 +104,7 @@ public class JavaFeeds implements Feeds {
 
     @Override
     public Result<Long> postMessage(String user, String pwd, Message msg) {
-        Log.info("postMessage: user = " + user + ", msg = " + msg);
+        // //Log.info("postMessage: user = " + user + ", msg = " + msg);
 
         // Check if user is valid
         if (user == null || pwd == null || msg == null) {
@@ -119,13 +119,11 @@ public class JavaFeeds implements Feeds {
             Log.info("SOAPPP EM RESTT");
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
-
         Result v = hasUser(user);
         if (!v.isOK()) {
             // //Log.info("User not found");
             return Result.error(Result.ErrorCode.NOT_FOUND);
         }
-        
         Result u = isUserValid(user, pwd);
 
         // Check if user exists
