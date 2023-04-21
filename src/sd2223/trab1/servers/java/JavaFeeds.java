@@ -30,6 +30,8 @@ public class JavaFeeds implements Feeds {
 
     private static final String DOMAIN = RestFeedsServer.DOMAIN;
 
+    private static String TYPE;
+
     /**
      * Map of message by user.
      */
@@ -102,7 +104,7 @@ public class JavaFeeds implements Feeds {
 
     @Override
     public Result<Long> postMessage(String user, String pwd, Message msg) {
-        // //Log.info("postMessage: user = " + user + ", msg = " + msg);
+        Log.info("postMessage: user = " + user + ", msg = " + msg);
 
         // Check if user is valid
         if (user == null || pwd == null || msg == null) {
@@ -113,6 +115,7 @@ public class JavaFeeds implements Feeds {
 
         // Check if user is in domain
         if (!domain.equals(DOMAIN)) {
+            Log.info("SOAPPP EM RESTT");
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
 
