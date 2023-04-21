@@ -7,7 +7,7 @@ import sd2223.trab1.clients.rest.RestUsersClient;
 import sd2223.trab1.clients.soap.SoapFeedsClient;
 import sd2223.trab1.clients.soap.SoapUsersClient;
 
-public class UsersClientFactory {
+public class ClientFactory {
 
     private static final String REST = "/rest";
 

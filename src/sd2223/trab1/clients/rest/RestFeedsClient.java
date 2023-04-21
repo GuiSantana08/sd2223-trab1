@@ -79,6 +79,13 @@ public class RestFeedsClient extends RestClient implements Feeds {
                 .request()
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
+        Result<List> messages = clt_getMessagesAux(r);
+        if (messages != null) return messages;
+
+        return null;
+    }
+
+    private Result<List> clt_getMessagesAux(Response r) {
         if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity()) {
             List<Message> messages = r.readEntity(new GenericType<List<Message>>() {
             });
@@ -86,7 +93,6 @@ public class RestFeedsClient extends RestClient implements Feeds {
         } else {
             System.out.println("Error, HTTP error status: " + r.getStatus());
         }
-
         return null;
     }
 
@@ -115,13 +121,8 @@ public class RestFeedsClient extends RestClient implements Feeds {
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
         // Log.info(r.toString());
-        if (r.getStatus() == Response.Status.OK.getStatusCode() && r.hasEntity()) {
-            List<Message> messages = r.readEntity(new GenericType<List<Message>>() {
-            });
-            return Result.ok(messages);
-        } else {
-            System.out.println("Error, HTTP error status: " + r.getStatus());
-        }
+        Result<List> messages = clt_getMessagesAux(r);
+        if (messages != null) return messages;
         return Result.error(Result.ErrorCode.NOT_FOUND);
     }
 

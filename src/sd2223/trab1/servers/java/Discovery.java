@@ -118,8 +118,8 @@ class DiscoveryImpl implements Discovery {
 	}
 
 	private void startListener() {
-		// Log.info(String.format("Starting discovery on multicast group: %s, port:
-		// %d\n", DISCOVERY_ADDR.getAddress(), DISCOVERY_ADDR.getPort()));
+		// Log.info(String.format("Starting discovery on multicast group: %s, port: %d\n", DISCOVERY_ADDR.getAddress
+		// (), DISCOVERY_ADDR.getPort()));
 
 		new Thread(() -> {
 			try (var ms = new MulticastSocket(DISCOVERY_ADDR.getPort())) {

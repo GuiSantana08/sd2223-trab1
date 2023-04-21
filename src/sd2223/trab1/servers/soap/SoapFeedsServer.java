@@ -19,12 +19,10 @@ public class SoapFeedsServer {
     private static Logger Log = Logger.getLogger(SoapFeedsServer.class.getName());
 
     public static void main(String[] args) throws Exception {
-        Log.info("ARGS SISE " + args.length);
-        Log.info("ARG 0 " + args[0]);
         DOMAIN = args[0];
         JavaFeeds.DOMAIN = DOMAIN;
-        Log.info("DOMAIN  ARG " + args[0]);
-        Log.info("DOMAIN  " + DOMAIN);
+        //Log.info("DOMAIN  ARG " + args[0]);
+        //Log.info("DOMAIN  " + DOMAIN);
         // Log.setLevel(Level.INFO);
 
         String ip = InetAddress.getLocalHost().getHostAddress();

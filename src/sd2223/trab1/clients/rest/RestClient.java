@@ -78,7 +78,6 @@ public class RestClient {
             case 405 -> ErrorCode.METHOD_NOT_ALLOWED;
             case 406 -> ErrorCode.NOT_ACCEPTABLE;
             case 409 -> ErrorCode.CONFLICT;
-            case 500 -> ErrorCode.INTERNAL_ERROR;
             case 503 -> ErrorCode.SERVICE_UNAVAILABLE;
             case 501 -> ErrorCode.NOT_IMPLEMENTED;
             default -> ErrorCode.INTERNAL_ERROR;

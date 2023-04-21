@@ -1,27 +1,15 @@
 package sd2223.trab1.servers.java;
 
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.server.Uri;
 import sd2223.trab1.api.Message;
 import sd2223.trab1.api.User;
 import sd2223.trab1.api.java.Feeds;
 import sd2223.trab1.api.java.Result;
-import sd2223.trab1.api.java.Users;
-import sd2223.trab1.api.rest.UsersService;
-import sd2223.trab1.clients.UsersClientFactory;
+import sd2223.trab1.clients.ClientFactory;
 
-import sd2223.trab1.servers.rest.RestFeedsServer;
-import sd2223.trab1.servers.rest.RestUsersServer;
-
-import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
-import sd2223.trab1.servers.soap.SoapFeedsServer;
-
-import static sd2223.trab1.clients.UsersClientFactory.getUserClient;
 
 public class JavaFeeds implements Feeds {
 
@@ -56,7 +44,6 @@ public class JavaFeeds implements Feeds {
         Log = Logger.getLogger(JavaFeeds.class.getName());
         msgID = 1;
         discovery = Discovery.getInstance();
-        DOMAIN = this.DOMAIN;
     }
 
     private Result<User> isUserValid(String user, String pwd) {
@@ -70,7 +57,7 @@ public class JavaFeeds implements Feeds {
             return Result.error(Result.ErrorCode.NOT_FOUND);
         }
         URI uri = uris[0];
-        Result<User> r = UsersClientFactory.getUserClient(uri).getUser(name, pwd);
+        Result<User> r = ClientFactory.getUserClient(uri).getUser(name, pwd);
         if (r.error().equals(Result.ErrorCode.NOT_FOUND))
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         else if (!r.isOK())
@@ -91,7 +78,7 @@ public class JavaFeeds implements Feeds {
         }
         URI uri = uris[0];
         // //Log.info("PROCURRAAAAAA USERRRRRRRRRR");
-        Result<List> r1 = UsersClientFactory.getUserClient(uri).searchUsers(name);
+        Result<List> r1 = ClientFactory.getUserClient(uri).searchUsers(name);
         if (!r1.isOK())
             return Result.error(r1.error());
         // //Log.info("DEVOLVEUUUUUU LISTTAAAAAAAAA");
@@ -174,7 +161,7 @@ public class JavaFeeds implements Feeds {
             URI[] uris = discovery.knownUrisOf(serviceName, 1);
             if (uris.length != 0) {
                 URI uri = uris[0];
-                Result<Message> r = UsersClientFactory.getFeedsClient(uri).getMessage(user, mid);
+                Result<Message> r = ClientFactory.getFeedsClient(uri).getMessage(user, mid);
                 if (r.isOK())
                     return r;
             }
@@ -208,15 +195,12 @@ public class JavaFeeds implements Feeds {
             String domainSub = partsSub[1];
             if (!domain.equals(domainSub)) {
                 // Get user messaeges in other domain
-                // Log.info("Get user messaeges in other domain");
-                // Log.info( "nameSus: " + nameSub + " domain: " + domain + " domainSub: " +
-                // domainSub);
                 String serviceName = domainSub + ":" + FEEDS_SERVICE;
                 URI[] uris = discovery.knownUrisOf(serviceName, 1);
                 if (uris.length != 0) {
                     URI uri = uris[0];
                     // Log.info("URI: " + uri);
-                    Result r2 = UsersClientFactory.getFeedsClient(uri).getOwnMessage(userID, mid);
+                    Result r2 = ClientFactory.getFeedsClient(uri).getOwnMessage(userID, mid);
                     // Log.info("Result: " + r2);
                     if (r2.isOK()) {
                         // //Log.info("Message found: " + r2.value());
@@ -305,7 +289,7 @@ public class JavaFeeds implements Feeds {
             URI[] uris = discovery.knownUrisOf(serviceName, 1);
             if (uris.length != 0) {
                 URI uri = uris[0];
-                Result<List> r = UsersClientFactory.getFeedsClient(uri).getMessages(user, time);
+                Result<List> r = ClientFactory.getFeedsClient(uri).getMessages(user, time);
                 if (r.isOK())
                     return r;
             }
@@ -343,7 +327,7 @@ public class JavaFeeds implements Feeds {
                         return Result.error(Result.ErrorCode.NOT_FOUND);
                     }
                     URI uri = uris[0];
-                    Result r2 = UsersClientFactory.getFeedsClient(uri).getOwnMessages(sub, time);
+                    Result r2 = ClientFactory.getFeedsClient(uri).getOwnMessages(sub, time);
                     if (r2.isOK()) {
                         // //Log.info("+++++++++++++" + r2.value().toString() + "++++++++++++++");
                         List<Message> messages1 = (List<Message>) r2.value();

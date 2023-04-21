@@ -52,10 +52,7 @@ public class JavaUsers implements Users {
         return Result.ok(user.getName() + "@" + user.getDomain());
     }
 
-    @Override
-    public Result<User> getUser(String name, String pwd) {
-        // Log.info("getUser : user = " + name + "; pwd = " + pwd);
-
+    private Result checkUser(String name, String pwd) {
         // Check if user is valid
         if (name == null || pwd == null) {
             // Log.info("Name or Password null.");
@@ -78,31 +75,20 @@ public class JavaUsers implements Users {
     }
 
     @Override
+    public Result<User> getUser(String name, String pwd) {
+        // Log.info("getUser : user = " + name + "; pwd = " + pwd);
+        return checkUser(name, pwd);
+    }
+
+    @Override
     public Result<User> updateUser(String name, String pwd, User user) {
         // return Result.error(Result.ErrorCode.NOT_IMPLEMENTED);
         // Log.info("updateUser : user = " + name + "; pwd = " + pwd);
 
-        if (name == null || pwd == null) {
-            // Log.info("UserId or password or user null");
-            return Result.error(Result.ErrorCode.BAD_REQUEST);
-            // throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        }
-
-        User user1 = getUser(name);
-
-        // Check if user exists
-        if (user1 == null) {
-            // Log.info("User does not exist.");
-            return Result.error(Result.ErrorCode.NOT_FOUND);
-            // throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-
-        // Check if the password is correct
-        if (!user1.getPwd().equals(pwd)) {
-            // Log.info("Password is incorrect.");
-            return Result.error(Result.ErrorCode.FORBIDDEN);
-            // throw new WebApplicationException(Response.Status.FORBIDDEN);
-        }
+        Result r = checkUser(name, pwd);
+        if(!r.isOK())
+            return r;
+        User user1 = (User) r.value();
 
         // Check if the username is the same
         if (!user1.getName().equals(user.getName())) {
