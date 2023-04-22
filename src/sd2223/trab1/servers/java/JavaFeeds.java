@@ -37,7 +37,7 @@ public class JavaFeeds implements Feeds {
 
     private Discovery discovery;
 
-    public JavaFeeds(String DOMAIN) {
+    public JavaFeeds() {
         userMessages = new ConcurrentHashMap<>();
         usersSubscribed = new ConcurrentHashMap<>();
         allMessages = new ConcurrentHashMap<>();
@@ -89,6 +89,16 @@ public class JavaFeeds implements Feeds {
         return Result.ok(true);
     }
 
+    private String[] userInfo(String user) {
+    var parts = user.split("@");
+        String name = parts[0];
+        String domain = parts[1];
+        String[] info = new String[2];
+        info[0] = name;
+        info[1] = domain;
+        return info;
+    }
+
     @Override
     public Result<Long> postMessage(String user, String pwd, Message msg) {
         // //Log.info("postMessage: user = " + user + ", msg = " + msg);
@@ -97,12 +107,11 @@ public class JavaFeeds implements Feeds {
         if (user == null || pwd == null || msg == null) {
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
-        var parts = user.split("@");
-        String domain = parts[1];
+        String[] info = userInfo(user);
 
-        Log.info("userDom " + domain + " DOMAIN " + DOMAIN);
+        Log.info("userDom " + info[1] + " DOMAIN " + DOMAIN);
         // Check if user is in domain
-        if (!domain.equals(DOMAIN)) {
+        if (!info[1].equals(DOMAIN)) {
             Log.info("SOAPPP EM RESTT");
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
@@ -136,13 +145,12 @@ public class JavaFeeds implements Feeds {
         return Result.ok(msg.getId());
     }
 
+
     @Override
     public Result<Message> getMessage(String user, long mid) {
         // Log.info("getMessage: user = " + user + ", mid = " + mid);
         // Log.info("DOMAIN: " + DOMAIN);
-        var parts = user.split("@");
-        String name = parts[0];
-        String domain = parts[1];
+       String[] info = userInfo(user);
 
         if (user == null && mid <= 0)
             return Result.error(Result.ErrorCode.BAD_REQUEST);
@@ -155,15 +163,14 @@ public class JavaFeeds implements Feeds {
         }
 
         // Check if user is in domain
-        if (!domain.equals(DOMAIN)) {
+        if (!info[1].equals(DOMAIN)) {
             Log.info("MESSAGE IS NOT IN DOMAIN");
-            String serviceName = domain + ":" + FEEDS_SERVICE;
+            String serviceName = info[1] + ":" + FEEDS_SERVICE;
             URI[] uris = discovery.knownUrisOf(serviceName, 1);
             if (uris.length != 0) {
                 URI uri = uris[0];
                 Result<Message> r = ClientFactory.getFeedsClient(uri).getMessage(user, mid);
-                if (r.isOK())
-                    return r;
+                return r;
             }
 
         }
@@ -193,7 +200,7 @@ public class JavaFeeds implements Feeds {
             var partsSub = userID.split("@");
             String nameSub = partsSub[0];
             String domainSub = partsSub[1];
-            if (!domain.equals(domainSub)) {
+            if (!info[1].equals(domainSub)) {
                 // Get user messaeges in other domain
                 String serviceName = domainSub + ":" + FEEDS_SERVICE;
                 URI[] uris = discovery.knownUrisOf(serviceName, 1);
@@ -264,11 +271,25 @@ public class JavaFeeds implements Feeds {
         return Result.error(Result.ErrorCode.NOT_FOUND);
     }
 
+    private List<Message> addUserMessages(String user, long time) {
+        List<Message> newMessages = new LinkedList<>();
+        // Add their new messages
+        List<Message> messages = userMessages.get(user);
+        // Check if user has any messages
+        if (messages != null) {
+            for (Message message : messages) {
+                if (message.getCreationTime() > time) {
+                    newMessages.add(message);
+                }
+            }
+        }
+        return newMessages;
+    }
+
     @Override
     public Result<List> getMessages(String user, long time) {
         // //Log.info("GetMessages: user = " + user + ", time = " + time);
-        var parts = user.split("@");
-        String domain = parts[1];
+        String[] info = userInfo(user);
         List<String> subs = usersSubscribed.get(user);
 
         // Check if user and time is valid
@@ -283,9 +304,9 @@ public class JavaFeeds implements Feeds {
         }
 
         // Check if user is in domain
-        if (!domain.equals(DOMAIN)) {
+        if (!info[1].equals(DOMAIN)) {
             Log.info("MESSAGE IS NOT IN DOMAIN");
-            String serviceName = domain + ":" + FEEDS_SERVICE;
+            String serviceName = info[1] + ":" + FEEDS_SERVICE;
             URI[] uris = discovery.knownUrisOf(serviceName, 1);
             if (uris.length != 0) {
                 URI uri = uris[0];
@@ -296,17 +317,7 @@ public class JavaFeeds implements Feeds {
 
         }
 
-        List<Message> newMessages = new LinkedList<>();
-        // Add their new messages
-        List<Message> messages = userMessages.get(user);
-        // Check if user has any messages
-        if (messages != null) {
-            for (Message message : messages) {
-                if (message.getCreationTime() > time) {
-                    newMessages.add(message);
-                }
-            }
-        }
+        List<Message> newMessages = addUserMessages(user, time);
         // Check if user has any subscribed users
         if (subs != null) {
             // Add their subscribed users new messages
@@ -316,7 +327,7 @@ public class JavaFeeds implements Feeds {
                 String domainSub = partsSub[1];
                 // //Log.info("///////////////// Domain: " + domain + "NameSub" + nameSub + "
                 // DomainSub: " + domainSub + "+++++++++++++++++++++++++++++++++++");
-                if (!domain.equals(domainSub)) {
+                if (!info[1].equals(domainSub)) {
                     // //Log.info("++++++++++++++++++++++++++++++++Get messages from other
                     // domain++++++++++++++++++++++");
                     // Get user messaeges in other domain
@@ -362,7 +373,6 @@ public class JavaFeeds implements Feeds {
         Result r1 = hasUser(user);
         if (!r1.isOK()) {
             // //Log.info("User not found");
-            System.out.println("NAO HA USERR");
             return Result.error(r1.error());
         }
 
@@ -372,14 +382,11 @@ public class JavaFeeds implements Feeds {
             for (Message message : messages) {
                 if (message.getId() == mid) {
                     // //Log.info("Message found: " + message);
-                    System.out.println("JACKPOOOTTTT");
                     return Result.ok(message);
                 }
             }
 
         }
-
-        System.out.println("CANAAAAA");
         return Result.error(Result.ErrorCode.NOT_FOUND);
     }
 
@@ -399,41 +406,33 @@ public class JavaFeeds implements Feeds {
             return Result.error(r1.error());
         }
 
-        List<Message> newMessages = new LinkedList<>();
-        // Add their new messages
-        List<Message> messages = userMessages.get(user);
-        // Check if user has any messages
-        if (messages != null) {
-            for (Message message : messages) {
-                if (message.getCreationTime() > time) {
-                    newMessages.add(message);
-                }
-            }
-        }
+        List<Message> newMessages = addUserMessages(user, time);
         // //Log.info("GETOWNMESSAGES New messages: " + newMessages.toString());
         return Result.ok(newMessages);
     }
 
-    @Override
-    public Result<Void> subUser(String user, String userSub, String pwd) {
-        // //Log.info("Sub a User: user = " + user + ", userSub = " + userSub);
-        // Check if user, the userSub and the pwd is valid
+    private Result checkSubUser(String user, String userSub, String pwd) {
         if (user == null || userSub == null || pwd == null) {
             return Result.error(Result.ErrorCode.BAD_REQUEST);
         }
-
         // Check if user is valid
         Result r = isUserValid(user, pwd);
         if (!r.isOK()) {
             // //Log.info("User not found or wrong password");
             return Result.error(r.error());
         }
-
         // Check if userSub exists
-        Result r2 = hasUser(userSub);
-        if (!r2.isOK()) {
+        return hasUser(userSub);
+    }
+
+    @Override
+    public Result<Void> subUser(String user, String userSub, String pwd) {
+        // //Log.info("Sub a User: user = " + user + ", userSub = " + userSub);
+        // Check if user, the userSub and the pwd is valid
+       Result r = checkSubUser(user, userSub, pwd);
+        if (!r.isOK()) {
             // //Log.info("UserSub not found");
-            return Result.error(r2.error());
+            return Result.error(r.error());
         }
 
         List subs = usersSubscribed.get(user);
@@ -456,18 +455,8 @@ public class JavaFeeds implements Feeds {
     public Result<Void> unsubscribeUser(String user, String userSub, String pwd) {
         // //Log.info("unsubscribeUser: user = " + user + ", userSub = " + userSub);
         // Check if user, the userSub and the pwd is valid
-        if (user == null || userSub == null || pwd == null) {
-            return Result.error(Result.ErrorCode.BAD_REQUEST);
-        }
-        // Check if user is valid
-        Result r = isUserValid(user, pwd);
+        Result r = checkSubUser(user, userSub, pwd);
         if (!r.isOK()) {
-            // //Log.info("User not found or wrong password");
-            return Result.error(r.error());
-        }
-        // Check if userSub exists
-        Result r2 = hasUser(userSub);
-        if (!r2.isOK()) {
             // //Log.info("UserSub not found");
             return Result.error(Result.ErrorCode.NOT_FOUND);
         }

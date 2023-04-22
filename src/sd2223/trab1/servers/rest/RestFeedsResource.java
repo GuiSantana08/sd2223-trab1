@@ -11,7 +11,7 @@ import java.util.List;
 @Singleton
 public class RestFeedsResource extends RestResource implements FeedsService {
     String domain = RestFeedsServer.DOMAIN;
-    final Feeds impl = new JavaFeeds(domain);
+    final Feeds impl = new JavaFeeds();
 
     public RestFeedsResource() {
     }
